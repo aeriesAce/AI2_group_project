@@ -1,5 +1,4 @@
 import dlt
-import Test_dlt
 pipeline = dlt.pipeline(
     pipeline_name = "jobtech_pipeline",
     destination= "duckdb",
