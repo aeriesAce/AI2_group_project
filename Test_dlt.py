@@ -3,13 +3,14 @@ import requests
 
 # Function to get data
 def fetch_jobs(occupation_fields):
-    base_url = dlt.secrets.value['sources.jobtech.credentials']['base_url']
+    base_url = "https://jobsearch.api.jobtechdev.se/search"
     for field in occupation_fields:
         params = {'occupation-field': field}
         response = requests.get(base_url, params=params)
         response.raise_for_status()
         data = response.json()
-        yield data  # DLT generator
+        for job in data.get("hits", []):
+            yield job  # DLT generator
 
 # DLT source (connectts to the pipeline)
 @dlt.source
