@@ -3,7 +3,7 @@ import requests
 
 # Function to get data
 def fetch_jobs(occupation_fields):
-    base_url = "https://jobsearch.api.jobtechdev.se/search"
+    base_url = "https://jobsearch.api.jobtechdev.se/search?offset=100&limit=100"
     for field in occupation_fields:
         params = {'occupation-field': field}
         response = requests.get(base_url, params=params)
