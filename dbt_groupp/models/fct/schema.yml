@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: dim_occupation
+    description: Dimension table for occupation categories and groups.
+    columns:
+      - name: occupation_id
+        tests: [unique, not_null]
+      - name: occupation_group
+        tests: [not_null]
+      - name: occupation_category
+
+  - name: dim_job_details
+    description: Dimension table for job_specific attributes.
+    columns:
+      - name: job_id
+        tests: [unique, not_null]
+      - name: headline
+        tests: [not_null]
+      - name: employment_type
+
+  - name: dim_employer
+    description: Dimension table for employer identity and location.
+    columns:
+      - name: employer_id
+        tests: [unique, not_null]
+      - name: employer_name
+        tests: [not_null]
+      - name: region
+      - name: municipality
+      - name: country
+  
+  - name: dim_auxilliary_attributes
+    description: Dimensional table for additional requirements.
+    columns:
+      - name: auxilliary_attributes_id
+        test: [unique, not_null]
+      - name: experience_required
+      - name: driving_license
+      - name: own_car
+  
+  - name: fct_job_ads
+    description: fact table combining job ads with dimension ref's and measures.
+    columns:
+      - name: occupation_id
+        tests: [not_null]
+      - name: job_id
+        tests: [not_null]
+      - name: employer_id
+        tests: [not_null]
+      - name: auxilliary_attributes_id
+        tests: [not_null]
+      - name: vacancies
+      - name: relevance
+      - name: deadline
