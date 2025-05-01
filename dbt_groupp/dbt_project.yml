@@ -19,14 +19,18 @@ models:
   dbt_groupp:
     +materialized: view
     +schema: staging
-  staging:
-    materialized: view
+    staging:
+      +materialized: view
 
   #src:
   #  +materialized: ephmeral
   
   #dim:
   #  +schema: refined
+
+  #warehouse:
+  #  +materialized: table
+  #  +schema: cleaned
 
   #fct:
   #  +schema: refined
