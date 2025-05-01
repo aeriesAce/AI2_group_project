@@ -19,24 +19,22 @@ models:
   dbt_groupp:
     +materialized: view
     +schema: staging
+    
     staging:
       +materialized: view
 
-  #src:
-  #  +materialized: ephmeral
-  
-  dim:
-    +materialized: table
-    +schema: refined
+    dim:
+      +materialized: table
+      +schema: refined
 
-  #warehouse:
-  #  +materialized: table
-  #  +schema: cleaned
+    warehouse:
+      +materialized: table
+      +schema: cleaned
 
-  fct:
-    +materialized: table
-    +schema: warehouse
-
-  
-  #marts:
-  #  +schema: marts
+    fct:
+      +materialized: table
+      +schema: warehouse
+      
+    mart:
+      +materialized: view
+      +schema: occupation
