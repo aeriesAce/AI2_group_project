@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: data_warehouse
+    description: cleaned view with extra logic based on fct_job_ads
+    columns:
+      - name: occupation_id
+        tests: [not_null]
+      - name: job_details_id
+        tests: [not_null]
+      - name: employer_id
+        tests: [not_null]
+      - name: auxilliary_attributes_id
+        tests: [not_null]
+      - name: days_until_deadline
+        description: Number of days from today until the deadline
+      - name: is_expired
+        description: True if the job ad deadline has passed
+
+        sdgsgjuodifpodsfijnsdfoi
