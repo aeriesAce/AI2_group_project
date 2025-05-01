@@ -27,9 +27,10 @@ models:
       +materialized: table
       +schema: refined
 
-    warehouse:
-      +materialized: table
-      +schema: cleaned
+      # had to temporary comment this out
+    # warehouse:
+    #   +materialized: table
+    #   +schema: cleaned
 
     fct:
       +materialized: table
