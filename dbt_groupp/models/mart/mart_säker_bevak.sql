@@ -10,5 +10,4 @@ SELECT
     relevance,
     deadline
 FROM {{ ref('fct_job_ads') }}
--- THIS IS A TEMPORARY FIX FOR TEST PURPOSE --
-WHERE CAST(occupation_id AS TEXT) = 'E7hm_BLq_fqZ'
+WHERE occupation_category = 'Säkerhet och bevakning'

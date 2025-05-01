@@ -6,6 +6,7 @@ WITH base AS(
         j.last_publication_date,
         j.number_of_vacancies,
         j.deadline,
+        j.occupation_category,
         o.occupation_id,
         d.job_details_id,
         e.employer_id,
@@ -37,6 +38,7 @@ WITH base AS(
 SELECT 
     occupation_id,
     job_id,
+    occupation_category,
     employer_id,
     auxilliary_attributes_id,
     number_of_vacancies,

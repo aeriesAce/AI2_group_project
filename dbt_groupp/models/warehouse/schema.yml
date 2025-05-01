@@ -16,5 +16,3 @@ models:
         description: Number of days from today until the deadline
       - name: is_expired
         description: True if the job ad deadline has passed
-
-        sdgsgjuodifpodsfijnsdfoi
