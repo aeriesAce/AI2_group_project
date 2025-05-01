@@ -11,7 +11,7 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-clean-targets:         # directories to be removed by `dbt clean`
+clean-targets:
   - "target"
   - "dbt_packages"
 
@@ -27,10 +27,9 @@ models:
       +materialized: table
       +schema: refined
 
-      # had to temporary comment this out
-    # warehouse:
-    #   +materialized: table
-    #   +schema: cleaned
+    warehouse:
+      +materialized: table
+      +schema: cleaned
 
     fct:
       +materialized: table

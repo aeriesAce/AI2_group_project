@@ -20,9 +20,6 @@ def show_kpis(df: pd.DataFrame, title: str):
 # Pedagogik
 
 df_ped = con.execute("SELECT * FROM occupation.mart_pedagogik").fetchdf()
-st.write("Rader i df_ped:", len(df_ped))
-st.dataframe(df_ped.head())
-
 show_kpis(df_ped, "Pedagogik")
 
 # Säkerhet och Bevakning
@@ -32,5 +29,4 @@ show_kpis(df_sb, "Säkerhet och Bevakning")
 # Transport, Distrubition och Lager
 df_sak = con.execute("SELECT * FROM occupation.mart_transp_ditr_lager").fetchdf()
 show_kpis(df_sak, "Transport, Distrubition och Lager")
-
 
