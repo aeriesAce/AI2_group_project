@@ -25,15 +25,18 @@ models:
   #src:
   #  +materialized: ephmeral
   
-  #dim:
-  #  +schema: refined
+  dim:
+    +materialized: table
+    +schema: refined
 
   #warehouse:
   #  +materialized: table
   #  +schema: cleaned
 
-  #fct:
-  #  +schema: refined
+  fct:
+    +materialized: table
+    +schema: warehouse
+
   
   #marts:
   #  +schema: marts

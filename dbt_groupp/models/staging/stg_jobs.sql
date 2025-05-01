@@ -12,6 +12,10 @@ With source AS (
         workplace_address__country AS country,
         last_publication_date,
         number_of_vacancies,
+        experience_required,
+        access_to_own_car AS own_car,
+        driving_license_required AS driving_license,
+        application_deadline AS deadline,
 
         CASE
             WHEN occupation_field__concept_id = 'MVqp_eS8_kDZ' THEN 'Pedagogik'
@@ -19,7 +23,7 @@ With source AS (
             WHEN occupation_field__concept_id = 'ASGV_zcE_bWf' THEN 'Transport och lager'
             ELSE 'Ospecifierad'
         END AS occupation_category
-    FROM {{source('staging', 'jobs')}}
+    FROM {{ source('staging', 'jobs') }}
 )
 
 Select * FROM source
