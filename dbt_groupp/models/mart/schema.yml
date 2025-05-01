@@ -1,0 +1,25 @@
+# Schema.yml for documentation and tests
+
+version: 2
+
+models:
+  - name: mart_pedagogik
+    description: "Mart-vy med jobbanalys för occupation field: Pedagogik"
+    columns:
+      - name: job_id
+        tests:
+          - not_null
+
+  - name: mart_säker_bevak
+    description: "Mart-vy med jobbanalys för occupation field: IT"
+    columns:
+      - name: job_id
+        tests:
+          - not_null
+    
+  - name: mart_transp_ditr_lager
+    description: "Mart-vy med jobbanalys för occupation field: Säkerhet och Bevakning"
+    columns:
+      - name: job_id
+        tests:
+          - not_null

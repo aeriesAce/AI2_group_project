@@ -2,9 +2,9 @@
 WITH source AS (
     SELECT DISTINCT
         md5(concat_ws('|',
-            COALESCE(experience_required, ''),
-            COALESCE(driving_license, ''),
-            COALESCE(own_car, '')
+            COALESCE(CAST(experience_required AS TEXT), ''),
+            COALESCE(CAST(driving_license AS TEXT), ''),
+            COALESCE(CAST(own_car AS TEXT), '')
         )) AS auxilliary_hash,
         experience_required,
         driving_license,
