@@ -1,6 +1,5 @@
 import streamlit as st
 import duckdb
-import pandas as pd
 #from Dashboard.dashboard import set_bg_pic
 from Dashboard.charts import ads_per_occupation
 
