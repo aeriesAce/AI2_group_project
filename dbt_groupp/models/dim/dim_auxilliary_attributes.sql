@@ -1,11 +1,6 @@
 --dim table för extra job requirements
 WITH source AS (
     SELECT DISTINCT
-        md5(concat_ws('|',
-            COALESCE(CAST(experience_required AS TEXT), ''),
-            COALESCE(CAST(driving_license AS TEXT), ''),
-            COALESCE(CAST(own_car AS TEXT), '')
-        )) AS auxilliary_hash,
         experience_required,
         driving_license,
         own_car
@@ -15,9 +10,7 @@ WITH source AS (
         OR own_car IS NOT NULL
 )
 SELECT
-    ROW_NUMBER() OVER (ORDER BY auxilliary_hash) AS auxilliary_attributes_id,
-    --auxilliary_hash is needed for join logic only
-    auxilliary_hash,
+    {{ dbt_utils.generate_surrogate_key(['experience_required', 'driving_license', 'own_car']) }} AS auxilliary_attributes_id,
     experience_required,
     driving_license,
     own_car

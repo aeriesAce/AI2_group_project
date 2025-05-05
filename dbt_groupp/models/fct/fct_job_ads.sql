@@ -14,25 +14,16 @@ WITH base AS(
         FROM {{ ref('stg_jobs') }} j
 
         LEFT JOIN {{ ref('dim_occupation') }} o
-            ON j.occupation_group = o.occupation_group
-                AND j.occupation_category = o.occupation_category
+            ON {{ dbt_utils.generate_surrogate_key(['j.occupation_group', 'j.occupation_category']) }} = o.occupation_id
         
         LEFT JOIN {{ ref('dim_job_details') }} d
-            ON j.headline = d.headline
-                AND j.employment_type = d.employment_type
+            ON {{ dbt_utils.generate_surrogate_key(['j.headline', 'j.employment_type']) }} = d.job_details_id
         
         LEFT JOIN {{ ref('dim_employer') }} e
-            ON j.employer_name = e.employer_name
-                AND j.region = e.region
-                AND j.municipality = e.municipality
-                AND j.country = e.country
+           ON {{ dbt_utils.dbt_utils.generate_surrogate_key(['j.employer_name', 'j.region', 'j.municipality', 'j.country']) }} = e.employer_id
         
         LEFT JOIN {{ ref('dim_auxilliary_attributes') }} a
-            ON md5(concat_ws('|',
-                COALESCE(j.experience_required, ''),
-                COALESCE(j.driving_license, ''),
-                COALESCE(j.own_car, '')
-            )) = a.auxilliary_hash
+            ON {{ dbt_utils.generate_surrogate_key(['j.experience_required', 'j.driving_license', 'j.own_car']) }} = a.auxilliary_attributes_id
 )
 
 SELECT 

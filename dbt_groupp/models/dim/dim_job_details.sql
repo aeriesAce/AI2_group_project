@@ -6,7 +6,7 @@ WITH source AS (
     FROM {{ ref ('stg_jobs') }}
 )
 SELECT 
-    ROW_NUMBER() OVER (ORDER BY headline) AS job_details_id, --surrogat nyckel då vi har transformerat den datan i staging.
+    {{ dbt_utils.generate_surrogate_key(['headline', 'employment_type']) }} AS job_details_id, --surrogat nyckel då vi har transformerat den datan i staging.
     headline,
     employment_type
 FROM source
