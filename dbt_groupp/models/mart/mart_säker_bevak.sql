@@ -6,6 +6,7 @@ SELECT
     occupation_id,
     employer_id,
     auxilliary_attributes_id,
+    region,
     number_of_vacancies,
     relevance,
     deadline
