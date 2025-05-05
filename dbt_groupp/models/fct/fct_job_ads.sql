@@ -7,6 +7,7 @@ WITH base AS(
         j.number_of_vacancies,
         j.deadline,
         j.occupation_category,
+        j.region,
         o.occupation_id,
         d.job_details_id,
         e.employer_id,
@@ -33,6 +34,7 @@ SELECT
     occupation_category,
     employer_id,
     auxilliary_attributes_id,
+    region,
     number_of_vacancies,
     relevance,
     deadline
