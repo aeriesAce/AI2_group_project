@@ -1,5 +1,7 @@
 import dlt
+import duckdb
 from Test_dlt import jobtech_source
+
 pipeline = dlt.pipeline(
     pipeline_name = "jobs",
     destination= "duckdb",
@@ -7,3 +9,7 @@ pipeline = dlt.pipeline(
 )
 info = pipeline.run(jobtech_source())
 print(info)
+
+con = duckdb.connect("jobs.duckdb")
+result = con.execute("SELECT COUNT(*) FROM staging.jobs").fetchone()
+print(f"Rows loaded into staging.jobs: {result[0]}")
