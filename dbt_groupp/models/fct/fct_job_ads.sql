@@ -10,7 +10,7 @@ WITH base AS(
         o.occupation_id,
         d.job_details_id,
         e.employer_id,
-        a.auxilliary_attributes_id
+        a.auxilliary_attributes_id,
         FROM {{ ref('stg_jobs') }} j
 
         LEFT JOIN {{ ref('dim_occupation') }} o
@@ -20,7 +20,7 @@ WITH base AS(
             ON {{ dbt_utils.generate_surrogate_key(['j.headline', 'j.employment_type']) }} = d.job_details_id
         
         LEFT JOIN {{ ref('dim_employer') }} e
-           ON {{ dbt_utils.dbt_utils.generate_surrogate_key(['j.employer_name', 'j.region', 'j.municipality', 'j.country']) }} = e.employer_id
+           ON {{ dbt_utils.generate_surrogate_key(['j.employer_name', 'j.region', 'j.municipality', 'j.country']) }} = e.employer_id        
         
         LEFT JOIN {{ ref('dim_auxilliary_attributes') }} a
             ON {{ dbt_utils.generate_surrogate_key(['j.experience_required', 'j.driving_license', 'j.own_car']) }} = a.auxilliary_attributes_id
@@ -29,6 +29,7 @@ WITH base AS(
 SELECT 
     occupation_id,
     job_id,
+    job_details_id,
     occupation_category,
     employer_id,
     auxilliary_attributes_id,
