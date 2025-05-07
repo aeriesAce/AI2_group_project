@@ -13,7 +13,7 @@ models:
   - name: dim_job_details
     description: Dimension table for job_specific attributes.
     columns:
-      - name: job_id
+      - name: job_details_id
         tests: [unique, not_null]
       - name: headline
         tests: [not_null]
