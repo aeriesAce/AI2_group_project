@@ -9,12 +9,12 @@ With source AS (
         occupation_group__label AS occupation_group,
         occupation__label AS occupation_label,
         workplace_address__municipality AS municipality,
-        workplace_adress__municipality_code AS municipality_code,
+        workplace_address__municipality_code AS municipality_code,
         workplace_address__region AS region,
-        workplace_adress__region_code AS region_code,
+        workplace_address__region_code AS region_code,
         workplace_address__country AS country,
         workplace_address__country_code AS country_code,
-        workplace_address__street_address AS workplace_adress,
+        workplace_address__street_address AS workplace_address,
         workplace_address__postcode AS workplace_postcode,
         workplace_address__city AS workplace_city,
         application_details__information AS application_information,
@@ -29,15 +29,15 @@ With source AS (
         application_deadline AS deadline,
         description__conditions AS conditions,
         description__text AS job_description,
+        description__text_formatted as job_description_formatted,
         salary_type__label AS salary_type,
         salary_description,
         duration__label AS duration,
         working_hours_type__label AS working_hours,
         employer__organization_number AS organization_number,
         employer__workplace AS employer_workplace,
-
-
-
+        scope_of_work__min as work_min,
+        scope_of_work__max as work_max,
 
         CASE
             WHEN occupation_field__concept_id = 'MVqp_eS8_kDZ' THEN 'Pedagogik'

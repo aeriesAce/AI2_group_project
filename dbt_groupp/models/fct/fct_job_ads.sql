@@ -3,11 +3,8 @@ WITH base AS(
         j.job_id,
         j.external_id,
         j.relevance,
-        j.last_publication_date,
         j.number_of_vacancies,
         j.deadline,
-        j.occupation_category,
-        j.region,
         o.occupation_id,
         d.job_details_id,
         e.employer_id,
@@ -29,12 +26,9 @@ WITH base AS(
 
 SELECT 
     occupation_id,
-    job_id,
     job_details_id,
-    occupation_category,
     employer_id,
     auxilliary_attributes_id,
-    region,
     number_of_vacancies,
     relevance,
     deadline
