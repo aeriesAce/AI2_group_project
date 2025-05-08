@@ -25,6 +25,7 @@ WITH base AS(
 )
 
 SELECT 
+    job_id,
     occupation_id,
     job_details_id,
     employer_id,

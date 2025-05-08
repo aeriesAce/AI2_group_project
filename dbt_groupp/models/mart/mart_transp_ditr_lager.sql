@@ -8,8 +8,9 @@ SELECT
     f.number_of_vacancies,
     d.region,
     d.municipality,
-    d.country
+    d.country,
+    o.occupation_category
 FROM {{ ref('fct_job_ads') }} f
-LEFT JOIN refined.dim_employer d ON f.employer_id = d.employer_id
-left join refined.dim_occupation o ON f.occupation_id = o.occupation_id
-WHERE f.occupation_category = 'Transport och lager'
+LEFT JOIN {{ ref('dim_employer') }} d ON f.employer_id = d.employer_id
+left join {{ref('dim_occupation') }} o ON o.occupation_id = o.occupation_id
+WHERE o.occupation_category = 'Transport och lager'
