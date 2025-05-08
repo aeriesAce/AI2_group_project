@@ -7,15 +7,37 @@ With source AS (
         employer__name AS employer_name,
         employment_type__label AS employment_type,
         occupation_group__label AS occupation_group,
+        occupation__label AS occupation_label,
         workplace_address__municipality AS municipality,
+        workplace_adress__municipality_code AS municipality_code,
         workplace_address__region AS region,
+        workplace_adress__region_code AS region_code,
         workplace_address__country AS country,
+        workplace_address__country_code AS country_code,
+        workplace_address__street_address AS workplace_adress,
+        workplace_address__postcode AS workplace_postcode,
+        workplace_address__city AS workplace_city,
+        application_details__information AS application_information,
+        application_details__other as application_details,
+        publication_date,
         last_publication_date,
+        removed,
         number_of_vacancies,
         experience_required,
         access_to_own_car AS own_car,
         driving_license_required AS driving_license,
         application_deadline AS deadline,
+        description__conditions AS conditions,
+        description__text AS job_description,
+        salary_type__label AS salary_type,
+        salary_description,
+        duration__label AS duration,
+        working_hours_type__label AS working_hours,
+        employer__organization_number AS organization_number,
+        employer__workplace AS employer_workplace,
+
+
+
 
         CASE
             WHEN occupation_field__concept_id = 'MVqp_eS8_kDZ' THEN 'Pedagogik'

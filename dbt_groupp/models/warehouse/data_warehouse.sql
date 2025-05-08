@@ -8,4 +8,4 @@ SELECT
     deadline <CURRENT_DATE AS is_expired, --ger oss aktiva annonser
     DATE_DIFF('day', CURRENT_DATE, deadline) AS days_until_deadline --visar hur många dagar kvar tills annonsen tar slut
 FROM base
-WHERE deadline >= CURRENT_DATE
+WHERE deadline >= CURRENT_DATE --removes the hits that has the deadline expired from the tables.
