@@ -10,6 +10,8 @@ SELECT
     d.region,
     d.municipality,
     d.country
+    o.occupation_category
 FROM {{ ref('fct_job_ads') }} f
 LEFT JOIN refined.dim_employer d ON f.employer_id = d.employer_id
+left join refined.dim_occupation o ON f.occupation_id = o.occupation_id
 WHERE f.occupation_category = 'Pedagogik'
