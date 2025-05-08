@@ -1,55 +1,49 @@
 version: 2
 
 models:
-  - name: dim_occupation
-    description: Dimension table for occupation categories and groups.
-    columns:
-      - name: occupation_id
-        tests: [unique, not_null]
-      - name: occupation_group
-        tests: [not_null]
-      - name: occupation_category
-
-  - name: dim_job_details
-    description: Dimension table for job_specific attributes.
-    columns:
-      - name: job_details_id
-        tests: [unique, not_null]
-      - name: headline
-        tests: [not_null]
-      - name: employment_type
-
-  - name: dim_employer
-    description: Dimension table for employer identity and location.
-    columns:
-      - name: employer_id
-        tests: [unique, not_null]
-      - name: employer_name
-        tests: [not_null]
-      - name: region
-      - name: municipality
-      - name: country
-  
-  - name: dim_auxilliary_attributes
-    description: Dimensional table for additional requirements.
-    columns:
-      - name: auxilliary_attributes_id
-        test: [unique, not_null]
-      - name: experience_required
-      - name: driving_license
-      - name: own_car
-  
   - name: fct_job_ads
     description: fact table combining job ads with dimension ref's and measures.
     columns:
       - name: occupation_id
-        tests: [not_null]
-      - name: job_id
-        tests: [not_null]
+        description: surrogate key to dim_occupation
+        tests:
+          - not_null
+          - relationships:
+              field: occupation_id
+              to: dim_occupation
+    
+      - name: job_details_id
+        description: surrogate key to dim_job_details
+        tests:
+          - not_null
+          - relationships:
+              field: dim_job_details
+              to: dim_job_details
+
       - name: employer_id
-        tests: [not_null]
+        description: surrogate key to dim_employer
+        tests:
+          - not_null
+          - relationships:
+              field: employer_id
+              to: dim_employer
+
       - name: auxilliary_attributes_id
-        tests: [not_null]
+        description: surrogate key to dim_auxilliary_attributes
+        tests:
+          - not_null
+          - relationships:
+              field: auxilliary_attributes_id
+              to: dim_auxilliary_attributes
+
       - name: vacancies
+        description: number of vacancies
+        tests:
+          - not_null
+
       - name: relevance
+        description: relevance score from the API
+
       - name: deadline
+        description: deadline until last day of application
+      
