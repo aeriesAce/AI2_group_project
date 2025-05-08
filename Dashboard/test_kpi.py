@@ -34,21 +34,11 @@ def show_tdl():
   df_tdl = con.execute("SELECT * FROM occupation.mart_transp_ditr_lager").fetchdf()
   show_kpis(df_tdl, "Transport, Distrubition och Lager")
 
-def show_reg():
-  df_reg = con.execute("SELECT 'region' FROM occupation.mart_pedagogik").fetchdf()
-  show_kpis(df_reg, "awdawd")
-
+#def show_reg():
+ 
+ # show_kpis(avgre1, avgre2 "Antal platser per region") ## lägga till denna som option istället för att visa hela tiden?
 # ----------------------------------------- 
 
 # Adding some more KPIS, seperating them for sanity
 
-#st.title("Amount of jobs per region")
 
-#def show_amount_per_region(df: pd.DataFrame, title: str):
- #   st.subheader(f"{title}")
-    
-   # region_df = df_ped.groupby(['number'].sum()
-  #  avg_vacancies = df['number_of_vacancies'].mean()
-
-   # st.metric("Totalt antal annonser per region", total_ads)
-    #st.metric("Snitt antal platser per region", f"{avg_vacancies:.1f}")
