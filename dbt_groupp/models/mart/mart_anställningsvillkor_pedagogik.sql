@@ -15,9 +15,18 @@ SELECT
     e.employer_id,
     e.region,
     e.municipality,
-    e.country
+    e.country,
+    f.conditions,
+    CASE 
+        WHEN LOWER(conditions) LIKE '%heltid%' THEN 'Heltid'
+        WHEN LOWER(conditions) LIKE '%deltid%' THEN 'Deltid'
+    END AS job_type
+    
 FROM fct_job_ads f
 LEFT JOIN dim_employer e ON f.employer_id = e.employer_id
 LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id
-WHERE o.occupation_category = 'Pedagogik'
+WHERE 
+    o.occupation_category = 'Pedagogik' 
+    AND (LOWER(f.conditions) LIKE '%heltid%' OR LOWER(f.conditions) LIKE '%deltid%')
+     
