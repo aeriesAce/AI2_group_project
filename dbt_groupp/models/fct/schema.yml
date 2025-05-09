@@ -17,7 +17,7 @@ models:
         tests:
           - not_null
           - relationships:
-              field: dim_job_details
+              field: job_details_id
               to: dim_job_details
 
       - name: employer_id
