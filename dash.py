@@ -8,7 +8,7 @@ conn = duckdb.connect('jobs.duckdb')
 # SQL-fråga för att få antalet jobb per job_type
 query = """
 SELECT job_type, COUNT(*) as count
-FROM refined.dim_job_details
+FROM occupation.mart_anställningsvillkor_pedagogik
 GROUP BY job_type;
 """
 
