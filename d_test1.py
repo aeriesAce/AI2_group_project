@@ -1,4 +1,4 @@
-from Dashboard.ui import set_sidebar, sidebar_choices, set_bg_pic
+from Dashboard.ui import set_bg_pic, set_sidebar, sidebar_choices
 
 df = None
 # using None just to try out the dashboard

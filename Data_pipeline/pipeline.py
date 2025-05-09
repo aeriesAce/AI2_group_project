@@ -1,5 +1,5 @@
 import dlt
-from data_pipeline.get_data import jobtech_source
+from get_data import jobtech_source
 
 pipeline = dlt.pipeline(
     pipeline_name = "jobs",

@@ -18,8 +18,8 @@ WITH base AS(
             ON {{ dbt_utils.generate_surrogate_key(['j.headline', 'j.employment_type']) }} = d.job_details_id
         
         LEFT JOIN {{ ref('dim_employer') }} e
-           ON {{ dbt_utils.generate_surrogate_key(['j.employer_name', 'j.region', 'j.municipality', 'j.country']) }} = e.employer_id        
-        
+            ON {{ dbt_utils.generate_surrogate_key(['j.employer_name', 'j.region', 'j.municipality', 'j.country', 'j.organization_number']) }} = e.employer_id  
+       
         LEFT JOIN {{ ref('dim_auxilliary_attributes') }} a
             ON {{ dbt_utils.generate_surrogate_key(['j.experience_required', 'j.driving_license', 'j.own_car']) }} = a.auxilliary_attributes_id
 )
