@@ -9,11 +9,6 @@ WITH source AS (
         salary_type,
         work_min,
         work_max,
-        conditions,
-        CASE 
-            WHEN LOWER(conditions) LIKE '%heltid%' THEN 'Heltid'
-            WHEN LOWER(conditions) LIKE '%deltid%' THEN 'Deltid'
-        END AS job_type
     FROM {{ ref ('stg_jobs') }}
 )
 SELECT 
@@ -25,7 +20,5 @@ SELECT
     duration,
     salary_type,
     work_min,
-    work_max,
-    job_type
+    work_max
 FROM source
-WHERE job_type IS NOT NULL
