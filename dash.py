@@ -20,3 +20,4 @@ conn.close()
 st.title("Jobbstatistik baserat på anställningsvillkor")
 st.bar_chart(data.set_index('job_type'))
 
+# fix
