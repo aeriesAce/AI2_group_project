@@ -1,16 +1,23 @@
-{{ config(materialized='view', schema='occupation') }}
+-- mart schema for the occupation field "transport och lager"
+WITH
+    fct_job_ads as (select * from {{ ref('fct_job_ads') }}),
+    dim_job_details as (select * from {{ ref('dim_job_details') }}),
+    dim_occupation as (select * from {{ ref('dim_occupation') }}),
+    dim_employer as (select * from {{ ref('dim_employer') }}),
+    dim_auxilliary_attributes as (select * from {{ ref('dim_auxilliary_attributes')}})
 
--- Join fct_job_ads with dim_employer to create a mart view for Transport och lager occupation
 SELECT
+    o.occupation_category,
     f.job_id,
-    f.employer_id,
-    d.employer_name,
     f.number_of_vacancies,
-    d.region,
-    d.municipality,
-    d.country,
-    o.occupation_category
-FROM {{ ref('fct_job_ads') }} f
-LEFT JOIN {{ ref('dim_employer') }} d ON f.employer_id = d.employer_id
-left join {{ref('dim_occupation') }} o ON o.occupation_id = o.occupation_id
+    jd.job_description,
+    e.employer_name,
+    e.employer_id,
+    e.region,
+    e.municipality,
+    e.country
+FROM fct_job_ads f
+LEFT JOIN dim_employer e ON f.employer_id = e.employer_id
+LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
+LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id
 WHERE o.occupation_category = 'Transport och lager'
