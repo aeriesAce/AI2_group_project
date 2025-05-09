@@ -9,6 +9,7 @@ WITH base AS(
         d.job_details_id,
         e.employer_id,
         a.auxilliary_attributes_id,
+        conditions
         FROM {{ ref('stg_jobs') }} j
 
         LEFT JOIN {{ ref('dim_occupation') }} o
@@ -32,5 +33,6 @@ SELECT
     auxilliary_attributes_id,
     number_of_vacancies,
     relevance,
-    deadline
+    deadline,
+    conditions
 FROM base
