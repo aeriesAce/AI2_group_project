@@ -1,6 +1,6 @@
 import streamlit as st
 import base64
-from Dashboard.test_kpi import show_tdl, show_pk, show_sob
+from Tests.test_kpi import show_tdl, show_pk, show_sob
 from Dashboard.charts import ads_per_occupation
 
 def set_bg_pic(img):

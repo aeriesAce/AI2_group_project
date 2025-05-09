@@ -1,5 +1,5 @@
 import streamlit as st
-from Dashboard.test_kpi import show_tdl, show_pk, show_sob, show_reg
+from Tests.test_kpi import show_tdl, show_pk, show_sob
 from Dashboard.charts import ads_per_occupation
 
 def pop_over():
@@ -16,8 +16,6 @@ def pop_over():
         show_sob()
     if tdl:
         show_tdl()
-    if reg:
-        show_reg()
 
     tab1, tab2 = st.tabs(["Diagram", "Test, tom"])
 

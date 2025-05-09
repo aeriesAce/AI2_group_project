@@ -1,6 +1,5 @@
 import dlt
-import duckdb
-from Test_dlt import jobtech_source
+from data_pipeline.get_data import jobtech_source
 
 pipeline = dlt.pipeline(
     pipeline_name = "jobs",
