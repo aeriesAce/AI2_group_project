@@ -13,5 +13,5 @@ SELECT
     {{ dbt_utils.generate_surrogate_key(['experience_required', 'driving_license', 'own_car']) }} AS auxilliary_attributes_id,
     experience_required,
     driving_license,
-    own_car,
+    own_car
 FROM source

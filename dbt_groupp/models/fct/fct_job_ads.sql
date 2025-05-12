@@ -1,5 +1,5 @@
-WITH base AS(
-    SELECT
+WITH base AS (
+    SELECT DISTINCT
         j.job_id,
         j.external_id,
         j.relevance,
@@ -13,7 +13,7 @@ WITH base AS(
         FROM {{ ref('stg_jobs') }} j
 
         LEFT JOIN {{ ref('dim_occupation') }} o
-            ON {{ dbt_utils.generate_surrogate_key(['j.occupation_group', 'j.occupation_category']) }} = o.occupation_id
+            ON {{ dbt_utils.generate_surrogate_key(['j.occupation_group', 'j.occupation_category', 'j.occupation_label']) }} = o.occupation_id
         
         LEFT JOIN {{ ref('dim_job_details') }} d
             ON {{ dbt_utils.generate_surrogate_key(['j.headline', 'j.employment_type']) }} = d.job_details_id
@@ -36,3 +36,7 @@ SELECT
     deadline,
     conditions
 FROM base
+WHERE occupation_id IS NOT NULL
+    AND job_details_id IS NOT NULL 
+    AND employer_id IS NOT NULL
+    AND auxilliary_attributes_id IS NOT NULL
