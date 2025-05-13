@@ -23,3 +23,10 @@ models:
       - name: job_id
         tests:
           - not_null
+  
+  - name: mart_anställningsvillkor_pedagogik
+    description: "Mart-vy med jobbanalys för anställningsvillkor inom pedagogik"
+    columns:
+      - name: job_id
+        tests:
+          - not_null
