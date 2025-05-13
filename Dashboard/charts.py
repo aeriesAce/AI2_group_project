@@ -1,12 +1,12 @@
 import streamlit as st
 import plotly_express as px
 import duckdb
-import pandas as pd
+import numpy as np
 con = duckdb.connect('jobs.duckdb')
 
 # test bar chart with the kpis to run in main
 def ads_per_occupation():
-    df = con.execute("SELECT * FROM occupation.mart_transp_ditr_lager").fetchdf()
+    df = con.execute("SELECT * FROM occupation.mart_tol").fetchdf()
 
     # use as_index=False to keep the group key (employer_name in this case) as a regular column
     # instead of an index, making it easier to access for visualization
@@ -16,27 +16,25 @@ def ads_per_occupation():
         x='employer_name',
         y='number_of_vacancies',
         labels={'employer_name': 'Arbetsgivare', 'number_of_vacancies': 'Antal platser'},
-        title='Topp 10 arbetsgivare med flest antal platser inom Transport och Lager'
+        title='Topp 10 arbetsgivare med flest antal platser inom Transport och Lager',
+        color = 'number_of_vacancies',
+        color_continuous_scale='blues'
     )
 
     st.plotly_chart(fig)
 
-def test_ads_occu(start_date, end_date):
-    df = con.execute("SELECT * FROM occupation.mart_transp_ditr_lager").fetchdf()
-    st.write("DEBUG: Kolumner i tabellen:", df.columns.tolist())
-    df["deadline"] = pd.to_datetime(df["deadline"])  # säkerställ rätt format
+def sun_chart():
+    df = con.execute("SELECT * FROM occupation.mart_tol").fetch_df()
 
-    # Filtrera på valt datumintervall
-    df = df[(df["deadline"].dt.date >= start_date) & (df["deadline"].dt.date <= end_date)]
-    # use as_index=False to keep the group key (employer_name in this case) as a regular column
-    # instead of an index, making it easier to access for visualization
-    top_employers = df.groupby('employer_name', as_index=False)['number_of_vacancies'].sum().head(10)
-    fig = px.bar(
+    top_employers = df.groupby(['employer_name', 'region', 'municipality'], as_index=False)['number_of_vacancies'].sum().head(8)
+    fig = px.sunburst(
         top_employers,
-        x='employer_name',
-        y='number_of_vacancies',
-        labels={'employer_name': 'Arbetsgivare', 'number_of_vacancies': 'Antal platser'},
-        title=f'Topp 10 arbetsgivare med flest antal platser inom Transport och Lager ({start_date} - {end_date})'
+        path =['employer_name', 'number_of_vacancies'],
+        values = 'number_of_vacancies',
+        color = 'number_of_vacancies', 
+        hover_data={'number_of_vacancies': True},
+        color_continuous_scale='blues',
+        color_continuous_midpoint=np.average(df['number_of_vacancies'], weights=df['number_of_vacancies'])
     )
 
     st.plotly_chart(fig)
