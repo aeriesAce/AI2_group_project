@@ -28,12 +28,12 @@ def show_pk():
 
 # Säkerhet och Bevakning
 def show_sob():
-  df_sob = con.execute("SELECT * FROM occupation.mart_säker_bevak").fetchdf()
+  df_sob = con.execute("SELECT * FROM occupation.mart_sob").fetchdf()
   show_kpis(df_sob, "Säkerhet och Bevakning")
 
 # Transport, Distrubition och Lager
 def show_tdl():
-  df_tdl = con.execute("SELECT * FROM occupation.mart_transp_ditr_lager").fetchdf()
+  df_tdl = con.execute("SELECT * FROM occupation.mart_tol").fetchdf()
   show_kpis(df_tdl, "Transport, Distrubition och Lager")
 
 #def show_reg():
