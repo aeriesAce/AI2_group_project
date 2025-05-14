@@ -1,6 +1,8 @@
-sources:
-  - name: jobs
-    schema: staging
-    tables:
-      - name: stg_jobs
-        identifier: jobs
+# DENNA BEHÖVER ÄNDRAS NÄR VI ÄR KLARA 
+
+# sources:
+#   - name: jobs
+#     schema: 
+#     tables:
+#       - name: 
+#         identifier: jobs
