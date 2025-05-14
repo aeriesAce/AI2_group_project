@@ -22,14 +22,13 @@ models:
     
     staging:
       +materialized: view
+    
+    src:
+      +materialized: ephermal
 
     dim:
       +materialized: table
       +schema: refined
-
-    warehouse:
-      +materialized: table
-      +schema: cleaned
 
     fct:
       +materialized: table

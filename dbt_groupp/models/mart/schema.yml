@@ -10,14 +10,14 @@ models:
         tests:
           - not_null
 
-  - name: mart_säker_bevak
+  - name: mart_sob
     description: "Mart-vy med jobbanalys för occupation field: IT"
     columns:
       - name: job_id
         tests:
           - not_null
     
-  - name: mart_transp_ditr_lager
+  - name: mart_tol
     description: "Mart-vy med jobbanalys för occupation field: Säkerhet och Bevakning"
     columns:
       - name: job_id
@@ -30,3 +30,20 @@ models:
       - name: job_id
         tests:
           - not_null
+    
+    models:
+  - name: mart_active_jobs
+    description: "Mart-vy med deadline"
+    columns:
+      - name: occupation_id
+        tests: [not_null]
+      - name: job_details_id
+        tests: [not_null]
+      - name: employer_id
+        tests: [not_null]
+      - name: auxilliary_attributes_id
+        tests: [not_null]
+      - name: days_until_deadline
+        description: Number of days from today until the deadline
+      - name: is_expired
+        description: True if the job ad deadline has passed
