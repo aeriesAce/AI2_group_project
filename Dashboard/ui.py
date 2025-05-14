@@ -3,22 +3,6 @@ import base64
 from Tests.test_kpi import show_tdl, show_pk, show_sob
 from Dashboard.charts import ads_per_occupation
 
-def set_bg_pic(img):
-    with open(img, "rb") as image:
-        encoded_string = base64.b64encode(image.read()).decode()
-    css = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{encoded_string}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
-
   # parameter set to _ only for testing
 def set_sidebar(_):
     add_selectbox = st.sidebar.selectbox(

@@ -2,6 +2,7 @@ import streamlit as st
 import plotly_express as px
 import duckdb
 import numpy as np
+import pandas as pd
 con = duckdb.connect('jobs.duckdb')
 
 # test bar chart with the kpis to run in main
@@ -22,6 +23,22 @@ def ads_per_occupation():
     )
 
     st.plotly_chart(fig)
+
+def jobs_per_type():
+    # SQL-fråga för att få antalet jobb per job_type
+    query = """
+    SELECT job_type, COUNT(*) as count
+    FROM occupation.mart_anställningsvillkor_pedagogik
+    GROUP BY job_type;
+    """
+
+    # Utför SQL-frågan och hämta resultatet
+    data = pd.read_sql(query, con)
+    con.close()
+
+    # Visa resultatet i Streamlit
+    st.title("Jobbstatistik baserat på anställningsvillkor")
+    st.bar_chart(data.set_index('job_type'))
 
 def sun_chart():
     df = con.execute("SELECT * FROM occupation.mart_tol").fetch_df()
