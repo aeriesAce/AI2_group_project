@@ -1,0 +1,6 @@
+sources:
+  - name: jobs
+    schema: staging
+    tables:
+      - name: stg_jobs
+        identifier: jobs
