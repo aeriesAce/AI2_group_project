@@ -55,3 +55,24 @@ def sun_chart():
     )
 
     st.plotly_chart(fig)
+
+
+
+    # ----------------------------------------------------- Generell funktion för charts -------------------------------------------------------------------------
+
+def show_bar_chart(df: pd.DataFrame, x: str, y: str, title: str, color_scale = "red"):
+    fig = px.bar(df, x=x, y=y, 
+                labels={x: x.replace("_", " ").title(),
+                        y: y.replace("_", " ").title()},
+                title=title, color= y, color_continuous_scale= color_scale)
+    st.plotly_chart(fig)
+
+    # ------------------------------------------------------ Top 10 inom lager vi stoppar in i den generella funktionen -----------------------------------------------
+
+def show_top_employers_tdl():
+    df = con.execute("SELECT * FROM occupation.mart_tol").fetch_df()
+    top_employers = (df.groupby("employer_name", as_index=False)
+                                ["number_of_vacancies"].sum()
+                                .sort_values("number_of_vacancies",ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", "number_of_vacancies", "Top 10 arbetsgivare inom Transport och Lager")
+
