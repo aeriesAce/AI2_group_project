@@ -76,3 +76,20 @@ def show_top_employers_tdl():
                                 .sort_values("number_of_vacancies",ascending=False).head(10))
     show_bar_chart(top_employers, "employer_name", "number_of_vacancies", "Top 10 arbetsgivare inom Transport och Lager")
 
+# ------------------------------------------------------ Top 10 inom pedagogik vi stoppar in i den generella funktionen -----------------------------------------------
+
+def show_top_employers_pedagogik():
+    df = con.execute("SELECT * FROM occupation.mart_pedagogik").fetch_df()
+    top_employers = (df.groupby("employer_name", as_index=False)
+                                ["number_of_vacancies"].sum()
+                                .sort_values("number_of_vacancies",ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", "number_of_vacancies", "Top 10 arbetsgivare inom Pedagogik")
+
+# ------------------------------------------------------ Top 10 inom säkerhet och bevakning vi stoppar in i den generella funktionen -----------------------------------------------
+
+def show_top_employers_sob():
+    df = con.execute("SELECT * FROM occupation.mart_sob").fetch_df()
+    top_employers = (df.groupby("employer_name", as_index=False)
+                                ["number_of_vacancies"].sum()
+                                .sort_values("number_of_vacancies",ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", "number_of_vacancies", "Top 10 arbetsgivare inom Säkerhet och bevakning")
