@@ -5,25 +5,6 @@ import numpy as np
 import pandas as pd
 con = duckdb.connect('jobs.duckdb')
 
-# test bar chart with the kpis to run in main
-def ads_per_occupation():
-    df = con.execute("SELECT * FROM occupation.mart_tol").fetchdf()
-
-    # use as_index=False to keep the group key (employer_name in this case) as a regular column
-    # instead of an index, making it easier to access for visualization
-    top_employers = df.groupby('employer_name', as_index=False)['number_of_vacancies'].sum().head(10)
-    fig = px.bar(
-        top_employers,
-        x='employer_name',
-        y='number_of_vacancies',
-        labels={'employer_name': 'Arbetsgivare', 'number_of_vacancies': 'Antal platser'},
-        title='Topp 10 arbetsgivare med flest antal platser inom Transport och Lager',
-        color = 'number_of_vacancies',
-        color_continuous_scale='blues'
-    )
-
-    st.plotly_chart(fig)
-
 def jobs_per_type():
     # SQL-fråga för att få antalet jobb per job_type
     query = """
@@ -40,6 +21,27 @@ def jobs_per_type():
     st.title("Jobbstatistik baserat på anställningsvillkor")
     st.bar_chart(data.set_index('job_type'))
 
+# ------------------------------------------------------- En Generell funktion för suncharts --------------------------------------------------------------------
+#def show_sunburst_chart(df: pd.DataFrame, path: list[str], value_col: str, title: str, color_scale='blues', top_n=8):
+    #df_grouped = (
+    #    df.groupby(path, as_index=False)[value_col]
+   #     .sum()
+  #      .sort_values(value_col, ascending=False)
+ #       .head(top_n))
+#
+    #fig = px.sunburst(
+    #    df_grouped,
+    #    path=path,
+    #    values=value_col,
+    #    color=value_col,
+    #    hover_data={value_col: True},
+    #    color_continuous_scale=color_scale,
+    #    color_continuous_midpoint=np.average(
+    #        df_grouped[value_col],
+    #        weights=df_grouped[value_col]))
+    #fig.update_layout(title=title)
+
+# ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
 def sun_chart():
     df = con.execute("SELECT * FROM occupation.mart_tol").fetch_df()
 
@@ -60,7 +62,7 @@ def sun_chart():
 
     # ----------------------------------------------------- Generell funktion för charts -------------------------------------------------------------------------
 
-def show_bar_chart(df: pd.DataFrame, x: str, y: str, title: str, color_scale = "red"):
+def show_bar_chart(df: pd.DataFrame, x: str, y: str, title: str, color_scale = "edge"):
     fig = px.bar(df, x=x, y=y, 
                 labels={x: x.replace("_", " ").title(),
                         y: y.replace("_", " ").title()},
