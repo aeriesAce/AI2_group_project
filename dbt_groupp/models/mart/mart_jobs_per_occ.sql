@@ -7,7 +7,7 @@ WITH
 SELECT
     o.occupation_category,
     o.occupation_group AS Yrke,
-    SUM(f.number_of_vacancies) AS "Totala jobb"
+    f.number_of_vacancies AS "Lediga jobb"
 FROM fct_job_ads f
 LEFT JOIN dim_employer e ON f.employer_id = e.employer_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id
