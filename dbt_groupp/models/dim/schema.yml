@@ -35,10 +35,10 @@ models:
         tests: [not_null]
       - name: employer_workplace
       - name: organization_number
-      - name: workplace_address
       - name: region
-      - name: workplace_postcode
       - name: municipality
+      - name: workplace_address
+      - name: workplace_postcode
       - name: country
 
   - name: dim_auxilliary_attributes
