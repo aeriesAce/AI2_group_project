@@ -1,6 +1,6 @@
 import streamlit as st
 from Dashboard.kpis import show_kpis
-from Dashboard.charts import ads_per_occupation
+from Dashboard.charts import show_bar_chart
 
   # parameter set to _ only for testing
 def set_sidebar(_):
@@ -37,4 +37,4 @@ def sidebar_choices(choice):
         show_kpis(choice)
     elif choice in ["Chart", "Charts"]:
         st.markdown("Bar chart for ads per occupation in Transport & Lager")
-        ads_per_occupation()
+        show_bar_chart()
