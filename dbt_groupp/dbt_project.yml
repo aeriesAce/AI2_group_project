@@ -18,17 +18,14 @@ clean-targets:
 models:
   dbt_groupp:
     +materialized: view
-    +schema: staging
-    
-    staging:
-      +materialized: view
     
     src:
-      +materialized: ephermal
+      +materialized: ephemeral
+      +schema: warehouse
 
     dim:
-      +materialized: table
-      +schema: refined
+     +materialized: table
+     +schema: refined
 
     fct:
       +materialized: table

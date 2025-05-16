@@ -1,24 +1,23 @@
 --dim table för employeer och location
-WITH source AS (
-SELECT DISTINCT
+SELECT
+    {{ dbt_utils.generate_surrogate_key(['employer_name', 'municipality']) }} AS employer_id,
     employer_name,
     employer_workplace,
     organization_number,
-    workplace_address,
     region,
-    workplace_postcode,
     municipality,
+    workplace_address,
+    workplace_postcode,
+    workplace_city,
     country
-FROM {{ ref ('stg_jobs') }}
-)
-SELECT
-{{ dbt_utils.generate_surrogate_key(['employer_name', 'region', 'municipality', 'country','organization_number']) }} AS employer_id, --surrogat nyckel då vi har transformerat den datan i staging.
-employer_name,
-employer_workplace,
-organization_number,
-workplace_address,
-region,
-workplace_postcode,
-municipality,
-country
-FROM source
+FROM {{ ref('src_employer') }}
+GROUP BY
+    employer_name,
+    employer_workplace,
+    organization_number,
+    region,
+    municipality,
+    workplace_address,
+    workplace_postcode,
+    workplace_city,
+    country

@@ -1,7 +1,8 @@
 version: 2
 
 sources:
-  - name: staging
+  - name: jobs
+    schema: staging
     tables:
-      - name: jobs
+      - name: staging
         description: "job data from source"

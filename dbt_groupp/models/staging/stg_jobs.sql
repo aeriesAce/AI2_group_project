@@ -45,7 +45,7 @@ With source AS (
             WHEN occupation_field__concept_id = 'ASGV_zcE_bWf' THEN 'Transport och lager'
             ELSE 'Ospecifierad'
         END AS occupation_category
-    FROM {{ source('staging', 'jobs') }}
+    FROM {{ source('jobs', 'jobs') }}
 )
 
 Select * FROM source
