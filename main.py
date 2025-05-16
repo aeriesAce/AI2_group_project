@@ -1,7 +1,9 @@
 # to run the whole program from here
-# do we want a background pic??
-#set_bg_pic('./Media/forest.png') 
-from Dashboard.charts import ads_per_occupation, sun_chart
+from Dashboard.charts import sun_chart
+from Dashboard.kpis import show_kpis
 
-ads_per_occupation()
-sun_chart()
+# to test the data for the kpis
+# a temporary static occupation
+selected_occupation = 'Transport och lager'
+show_kpis(selected_occupation)
+sun_chart(selected_occupation)

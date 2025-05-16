@@ -27,10 +27,9 @@ models:
      +materialized: table
      +schema: refined
 
+
     fct:
-      +materialized: table
-      +schema: warehouse
+      +schema: refined
       
     mart:
-      +materialized: view
-      +schema: occupation
+      +schema: marts
