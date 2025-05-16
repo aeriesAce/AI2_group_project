@@ -1,11 +1,29 @@
+-- mart schema for developement over time --
+
 WITH base AS (
     SELECT *
-    FROM {{ ref('fct_job_ads') }}
+    FROM {{ ref('stg_jobs') }}
+    WHERE deadline >= CURRENT_DATE
 )
 
 SELECT
-    *,
-    deadline <CURRENT_DATE AS is_expired, --ger oss aktiva annonser
-    DATE_DIFF('day', CURRENT_DATE, deadline) AS days_until_deadline --visar hur många dagar kvar tills annonsen tar slut
+    DATE_TRUNC('month', publication_date) AS month,
+    DATE_TRUNC('quarter', publication_date) AS quarter,
+    DATE_TRUNC('year', publication_date) AS year,
+    occupation_category,
+    occupation_group,
+    region,
+    municipality,
+    COUNT(job_id) AS antal_annonser,
+    SUM(number_of_vacancies) AS "Totala jobb",
+    MIN(deadline) AS första_deadline,
+    MAX(deadline) AS sista_deadline
 FROM base
-WHERE deadline >= CURRENT_DATE --removes the hits that has the deadline expired from the tables.
+GROUP BY
+    DATE_TRUNC('month', publication_date),
+    DATE_TRUNC('quarter', publication_date),
+    DATE_TRUNC('year', publication_date),
+    occupation_category,
+    occupation_group,
+    region,
+    municipality

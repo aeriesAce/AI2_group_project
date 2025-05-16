@@ -1,4 +1,4 @@
--- mart schema for the occupation field "pedagogik"
+-- mart schema for employement form--
 WITH
     fct_job_ads as (select * from {{ ref('fct_job_ads') }}),
     dim_job_details as (select * from {{ ref('dim_job_details') }}),
@@ -26,6 +26,8 @@ FROM fct_job_ads f
 LEFT JOIN dim_employer e ON f.employer_id = e.employer_id
 LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id
+
+-- Salih, this is the only change I made, so it would become generic //elvira
 WHERE 
-    o.occupation_category = 'Pedagogik' 
-    AND (LOWER(f.conditions) LIKE '%heltid%' OR LOWER(f.conditions) LIKE '%deltid%')
+    LOWER(f.conditions) LIKE '%heltid%' 
+    OR LOWER(f.conditions) LIKE '%deltid%'
