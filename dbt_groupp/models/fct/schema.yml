@@ -47,3 +47,5 @@ models:
       - name: deadline
         description: deadline until last day of application
       
+      - name: working_hours
+        description: renamed to conditions, states the amount of work to be expected
