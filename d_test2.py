@@ -1,5 +1,5 @@
 import streamlit as st
-from Dashboard.charts import show_bar_chart, show_top_employers_pedagogik,show_top_employers_sob,show_top_employers_tdl, sun_chart
+from Dashboard.charts import show_bar_chart, show_top_employers_pedagogik,show_top_employers_sob,show_top_employers_tdl, pydeck_chart
 
 def pop_over():
     selected_occupation = 'Pedagogik'
@@ -16,12 +16,13 @@ def pop_over():
         show_top_employers_sob(selected_occupation2)
     if tdl:
         show_top_employers_tdl(selected_occupation3)
-
+   
     tab1, tab2 = st.tabs(["Diagram", "Test, tom"])
 
     with tab1:
         st.subheader("Ett stapeldiagram")
         show_bar_chart()
+        pydeck_chart()
 
     with tab2:
         st.subheader("Tomt för test")
