@@ -8,8 +8,8 @@ models:
         tests: [unique, not_null]
       - name: occupation_group
         tests: [not_null]
-      - name: occupation_category
       - name: occupation_label
+      - name: occupation_category
 
   - name: dim_job_details
     description: Dimension table for job characteristics.
