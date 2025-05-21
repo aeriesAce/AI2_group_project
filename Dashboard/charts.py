@@ -54,17 +54,17 @@ df = con.execute("""
 
 # ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
 def sun_chart(select_occ):
-    df = con.execute("SELECT * FROM marts.mart_jobs_per_city").fetch_df()
+    df = con.execute("SELECT * FROM marts.mart_pedagogik").fetch_df()
     df = df[df["occupation_category"] == select_occ]
-    top_employers = df.groupby(['employer_name', 'municipality'], as_index=False)["Totala jobb"].sum()
+    top_employers = df.groupby(['employer_name', 'municipality'], as_index=False)['number_of_vacancies'].sum()
     fig = px.sunburst(
         top_employers,
-        path =['municipality', "Totala jobb"],
-        values = "Totala jobb"  ,
-        color = "Totala jobb", 
-        hover_data={"Totala jobb": True},
+        path =['municipality', 'number_of_vacancies'],
+        values = 'number_of_vacancies',
+        color = 'number_of_vacancies', 
+        hover_data={'number_of_vacancies': True},
         color_continuous_scale='blues',
-        color_continuous_midpoint=np.average(df["Totala jobb"], weights=df["Totala jobb"])
+        color_continuous_midpoint=np.average(df['number_of_vacancies'], weights=df['number_of_vacancies'])
     )
 
     st.plotly_chart(fig)
@@ -80,7 +80,9 @@ def show_bar_chart(query: str, x: str, y: str, title: str, color_scale = "edge")
     fig = px.bar(df, x=x, y=y, 
                 labels={x: x.replace("_", " ").title(),
                         y: y.replace("_", " ").title()},
-                title=title, color= y, color_continuous_scale= color_scale)
+                title=title, 
+                color=y, 
+                color_continuous_scale= "edge")
     st.plotly_chart(fig)
 
     # ------------------------------------------------------- Generell funktion för PyDeck map chart --------------------------------------------------------------#
@@ -179,19 +181,17 @@ pydeck_chart(
 
     # ------------------------------------------------------ Top 10 inom lager vi stoppar in i den generella funktionen -----------------------------------------------
 
-def show_top_employers_tdl(select_occ):
-    df = con.execute("SELECT * FROM marts.mart_jobs_per_city").fetch_df()
-    df = df[df["occupation_category"] == select_occ]
+def show_top_employers_tdl():
+    df = con.execute("SELECT * FROM marts.mart_tran_lager").fetch_df()
     top_employers = (df.groupby("employer_name", as_index=False)
-                                ["Totala jobb"].sum()
-                                .sort_values("Totala jobb",ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", "Totala jobb", "Top 10 arbetsgivare inom Transport och Lager")
+                                ['number_of_vacancies'].sum()
+                                .sort_values('number_of_vacancies',ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", 'number_of_vacancies', "Top 10 arbetsgivare inom Transport och Lager")
 
 # ------------------------------------------------------ Top 10 inom pedagogik vi stoppar in i den generella funktionen -----------------------------------------------
 
-def show_top_employers_pedagogik(select_occ):
-    df = con.execute("SELECT * FROM marts.mart_jobs_per_city").fetch_df()
-    df = df[df["occupation_category"] == select_occ]
+def show_top_employers_pedagogik():
+    df = con.execute("SELECT * FROM marts.mart_pedagogik").fetch_df()
     top_employers = (df.groupby("employer_name", as_index=False)
                                 ["Totala jobb"].sum()
                                 .sort_values("Totala jobb",ascending=False).head(10))
@@ -199,10 +199,9 @@ def show_top_employers_pedagogik(select_occ):
 
 # ------------------------------------------------------ Top 10 inom säkerhet och bevakning vi stoppar in i den generella funktionen -----------------------------------------------
 
-def show_top_employers_sob(select_occ):
-    df = con.execute("SELECT * FROM marts.mart_jobs_per_city").fetch_df()
-    df = df[df["occupation_category"] == select_occ]
-    top_employers = (df.groupby("employer_name", as_index=False)
-                                ["Totala jobb"].sum()
-                                .sort_values("Totala jobb",ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", "Totala jobb", "Top 10 arbetsgivare inom Säkerhet och bevakning")
+def show_top_employers_sob():
+    df = con.execute("SELECT * FROM marts.mart_sakr_bevak").fetch_df()
+    top_employers = (df.groupby('number_of_vacancies', as_index=False)
+                                ['number_of_vacancies'].sum()
+                                .sort_values('number_of_vacancies',ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", 'number_of_vacancies', "Top 10 arbetsgivare inom Säkerhet och bevakning")

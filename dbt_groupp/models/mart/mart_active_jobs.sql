@@ -1,5 +1,4 @@
 -- mart schema for developement over time --
-
 WITH base AS (
     SELECT *
     FROM {{ ref('stg_jobs') }}
