@@ -26,7 +26,7 @@ def jobs_per_type():                ### Vet inte riktigt varför denna är här 
 
 # ------------------------------ TEST KPI FÖR MAP CHART -----------------------------------
 df = con.execute("""
-    SELECT municipality, SUM(number_of_vacancies) AS number_of_vacancies
+    SELECT municipality, SUM(vacancies) AS vacancies
     FROM occupation.mart_pedagogik
     GROUP BY municipality
 """).fetchdf()
@@ -56,15 +56,15 @@ df = con.execute("""
 def sun_chart(select_occ):
     df = con.execute("SELECT * FROM marts.mart_pedagogik").fetch_df()
     df = df[df["occupation_category"] == select_occ]
-    top_employers = df.groupby(['employer_name', 'municipality'], as_index=False)['number_of_vacancies'].sum()
+    top_employers = df.groupby(['employer_name', 'municipality'], as_index=False)['vacancies'].sum()
     fig = px.sunburst(
         top_employers,
-        path =['municipality', 'number_of_vacancies'],
-        values = 'number_of_vacancies',
-        color = 'number_of_vacancies', 
-        hover_data={'number_of_vacancies': True},
+        path =['municipality', 'vacancies'],
+        values = 'vacancies',
+        color = 'vacancies', 
+        hover_data={'vacancies': True},
         color_continuous_scale='blues',
-        color_continuous_midpoint=np.average(df['number_of_vacancies'], weights=df['number_of_vacancies'])
+        color_continuous_midpoint=np.average(df['vacancies'], weights=df['vacancies'])
     )
 
     st.plotly_chart(fig)
@@ -147,7 +147,7 @@ with open("Dashboard/swedish_regions.geojson", encoding="utf-8") as f:
 
 
 df = con.execute("""
-    SELECT municipality, SUM(number_of_vacancies) AS number_of_vacancies
+    SELECT municipality, SUM(vacancies) AS vacancies
     FROM occupation.mart_sob
     GROUP BY municipality
 """).fetchdf()         ####### denna ska bort sen då vi har en ovanför också. ska köra select box för dom olika alternativen.
@@ -159,7 +159,7 @@ pydeck_chart(
     df=df,
     match_col_geojson="name",         # geojson matchning
     match_col_df="municipality",      # matchar med municipality
-    value_col="number_of_vacancies",
+    value_col="vacancies",
     use_normalized = True,
     tooltip_title="Platser",
     tooltip_field = "name"
@@ -184,9 +184,9 @@ pydeck_chart(
 def show_top_employers_tdl():
     df = con.execute("SELECT * FROM marts.mart_tran_lager").fetch_df()
     top_employers = (df.groupby("employer_name", as_index=False)
-                                ['number_of_vacancies'].sum()
-                                .sort_values('number_of_vacancies',ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", 'number_of_vacancies', "Top 10 arbetsgivare inom Transport och Lager")
+                                ['vacancies'].sum()
+                                .sort_values('vacancies',ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", 'vacancies', "Top 10 arbetsgivare inom Transport och Lager")
 
 # ------------------------------------------------------ Top 10 inom pedagogik vi stoppar in i den generella funktionen -----------------------------------------------
 
@@ -201,7 +201,7 @@ def show_top_employers_pedagogik():
 
 def show_top_employers_sob():
     df = con.execute("SELECT * FROM marts.mart_sakr_bevak").fetch_df()
-    top_employers = (df.groupby('number_of_vacancies', as_index=False)
-                                ['number_of_vacancies'].sum()
-                                .sort_values('number_of_vacancies',ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", 'number_of_vacancies', "Top 10 arbetsgivare inom Säkerhet och bevakning")
+    top_employers = (df.groupby('vacancies', as_index=False)
+                                ['vacancies'].sum()
+                                .sort_values('vacancies',ascending=False).head(10))
+    show_bar_chart(top_employers, "employer_name", 'vacancies', "Top 10 arbetsgivare inom Säkerhet och bevakning")
