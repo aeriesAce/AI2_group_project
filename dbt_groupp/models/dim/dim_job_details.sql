@@ -8,7 +8,7 @@ WITH source AS (
         duration,
         salary_type,
         work_min,
-        work_max,
+        work_max
     FROM {{ ref ('stg_jobs') }}
 )
 SELECT 
