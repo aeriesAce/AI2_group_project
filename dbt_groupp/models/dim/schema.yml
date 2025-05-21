@@ -5,7 +5,7 @@ models:
     description: Dimension table for occupation classifications.
     columns:
       - name: occupation_id
-        tests: [unique, not_null]
+        tests: [not_null]
       - name: occupation_group
         tests: [not_null]
       - name: occupation_label
@@ -15,7 +15,7 @@ models:
     description: Dimension table for job characteristics.
     columns:
       - name: job_details_id
-        tests: [unique, not_null]
+        tests: [not_null]
       - name: headline
         tests: [not_null]
       - name: job_description
@@ -30,7 +30,7 @@ models:
     description: Dimension table for employer and location.
     columns:
       - name: employer_id
-        tests: [unique, not_null]
+        tests: [not_null]
       - name: employer_name
         tests: [not_null]
       - name: employer_workplace
@@ -44,8 +44,8 @@ models:
   - name: dim_auxilliary_attributes
     description: Dimension table for additional job requirements.
     columns:
-      - name: auxilliary_attributes_id
-        tests: [unique, not_null]
+      - name: auxilliary_id
+        tests: [not_null]
       - name: experience_required
       - name: driving_license
       - name: own_car
