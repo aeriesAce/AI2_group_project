@@ -8,8 +8,8 @@ models:
         tests: [unique, not_null]
       - name: occupation_group
         tests: [not_null]
-      - name: occupation_category
       - name: occupation_label
+      - name: occupation_category
 
   - name: dim_job_details
     description: Dimension table for job characteristics.
@@ -35,10 +35,10 @@ models:
         tests: [not_null]
       - name: employer_workplace
       - name: organization_number
-      - name: workplace_address
       - name: region
-      - name: workplace_postcode
       - name: municipality
+      - name: workplace_address
+      - name: workplace_postcode
       - name: country
 
   - name: dim_auxilliary_attributes

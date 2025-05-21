@@ -1,0 +1,8 @@
+# DENNA BEHÖVER ÄNDRAS NÄR VI ÄR KLARA 
+  version: 2
+
+  sources:
+   - name: jobs
+     schema: staging
+     tables:
+      - name: jobs

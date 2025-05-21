@@ -1,18 +1,6 @@
 -- dim table för job details
-WITH source AS (
-    SELECT DISTINCT
-        headline,
-        job_description,
-        job_description_formatted,
-        employment_type,
-        duration,
-        salary_type,
-        work_min,
-        work_max
-    FROM {{ ref ('stg_jobs') }}
-)
-SELECT 
-    {{ dbt_utils.generate_surrogate_key(['headline', 'employment_type']) }} AS job_details_id, --surrogat nyckel då vi har transformerat den datan i staging.
+SELECT
+    {{ dbt_utils.generate_surrogate_key(['job_id', 'headline']) }} AS job_details_id,
     headline,
     job_description,
     job_description_formatted,
@@ -21,4 +9,14 @@ SELECT
     salary_type,
     work_min,
     work_max
-FROM source
+FROM {{ ref('src_job_details') }}
+GROUP BY
+    job_id,
+    headline,
+    job_description,
+    job_description_formatted,
+    employment_type,
+    duration,
+    salary_type,
+    work_min,
+    work_max
