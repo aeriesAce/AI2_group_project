@@ -8,8 +8,7 @@ WITH
 
 SELECT
     o.occupation_category,
-    f.job_id,
-    f.number_of_vacancies,
+    f.vacancies,
     jd.job_description,
     e.employer_name,
     e.employer_id,
