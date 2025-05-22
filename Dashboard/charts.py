@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import pydeck as pdk
 import json
+import os
 
 con = duckdb.connect('jobs.duckdb')
 
@@ -25,13 +26,12 @@ def jobs_per_type():                ### Vet inte riktigt varför denna är här 
     st.bar_chart(data.set_index('job_type'))
 
 # ------------------------------ TEST KPI FÖR MAP CHART -----------------------------------
+
 df = con.execute("""
     SELECT municipality, SUM(vacancies) AS vacancies
-    FROM occupation.mart_pedagogik
+    FROM marts.mart_pedagogik
     GROUP BY municipality
 """).fetchdf()
-
-
 # ------------------------------------------------------- En Generell funktion för suncharts --------------------------------------------------------------------
 #def show_sunburst_chart(df: pd.DataFrame, path: list[str], value_col: str, title: str, color_scale='blues', top_n=8):
     #df_grouped = (
@@ -51,6 +51,7 @@ df = con.execute("""
     #        df_grouped[value_col],
     #        weights=df_grouped[value_col]))
     #fig.update_layout(title=title)
+
 
 # ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
 def sun_chart(select_occ):
@@ -87,32 +88,36 @@ def show_bar_chart(query: str, x: str, y: str, title: str, color_scale = "edge")
 
     # ------------------------------------------------------- Generell funktion för PyDeck map chart --------------------------------------------------------------#
 
-def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, use_normalized=True,color_scale_factor=255, tooltip_title="område", tooltip_field = "name", zoom=4):
+with open("Dashboard/swedish_municipalities.geojson", encoding="utf-8") as f:
+    geojson_data = json.load(f)
 
+def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, use_normalized=True,color_scale_factor=255, tooltip_title="område", tooltip_field = "kom_namn", zoom=4):
+
+    df[match_col_df] = df[match_col_df].astype(str).str.strip().str.lower()
     for feature in geojson_data["features"]:
-        geo_name = feature["properties"][match_col_geojson]
-        match = df[df[match_col_df] == geo_name]
+        geo_name = feature["properties"].get(match_col_geojson, "").strip().lower()
+        match = df[df[match_col_df].str.strip().str.lower() == geo_name.strip().lower()]
 
         if not match.empty:
             feature["properties"]["value"] = int(match[value_col].values[0])
-        else:
-            feature["properties"]["value"] = 0
+    else:
+        feature["properties"]["value"] = 0
     
     if use_normalized:
-        max_val = max([np.log1p(f["properties"]["value"]) for f in geojson_data["features"]])
+        max_val = max([np.log1p(f["properties"].get("value", 0)) for f in geojson_data["features"] if isinstance(f["properties"].get("value", 0), (int,float))])
         for f in geojson_data["features"]:
-            val = f["properties"]["value"]
+            val = f["properties"].get("value", 0)
             log_val = np.log1p(val)
             f["properties"]["norm_value"] = log_val / max_val if max_val > 0 else 0
         else:
             for f in geojson_data["features"]:
-                val = f["properties"]["value"]
+                val = f["properties"].get("value", 0)
                 f["properties"]["color_val"] = val * color_scale_factor
 
 
     layer = pdk.Layer(
         "GeoJsonLayer",
-        regions_geojson,
+        geojson_data,
         pickable=True,
         opacity=0.3,
         stroked=True,
@@ -137,35 +142,17 @@ def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, u
 
     st.pydeck_chart(deck)
 
-
-
-
-    
-with open("Dashboard/swedish_regions.geojson", encoding="utf-8") as f:
-    regions_geojson = json.load(f)
-
-
-
-df = con.execute("""
-    SELECT municipality, SUM(vacancies) AS vacancies
-    FROM occupation.mart_sob
-    GROUP BY municipality
-""").fetchdf()         ####### denna ska bort sen då vi har en ovanför också. ska köra select box för dom olika alternativen.
-
-# Visa kartan
 st.title("Antal platser per kommun – Pedagogik")
 pydeck_chart(
-    geojson_data=regions_geojson,
-    df=df,
-    match_col_geojson="name",         # geojson matchning
-    match_col_df="municipality",      # matchar med municipality
-    value_col="vacancies",
-    use_normalized = True,
-    tooltip_title="Platser",
-    tooltip_field = "name"
-)
-
-
+            geojson_data=geojson_data,
+            df=df,
+            match_col_geojson="kom_namn",         # geojson matchning
+            match_col_df="municipality",      # matchar med municipality
+            value_col="vacancies",
+            use_normalized = True,
+            tooltip_title="område",
+            tooltip_field = "kom_namn"
+        )
 
 
 #######################       Denna är inte generell än, kommer bygga om den lite, men blir lättare att se för mig sen när jag ser helheten ############
