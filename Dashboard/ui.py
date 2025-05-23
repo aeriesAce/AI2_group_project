@@ -25,7 +25,7 @@ def background_pic(image):
     )
 
 def dashboard():
-    background_pic("Dashboard/Hr.png")
+    background_pic("Dashboard/Media/Hr.png")
     st.title("HR Dashboard per kategori")
 
     # choosing a category
