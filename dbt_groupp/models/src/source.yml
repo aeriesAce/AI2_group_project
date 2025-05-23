@@ -6,3 +6,6 @@
      schema: staging
      tables:
       - name: jobs
+        meta: 
+          dagster:
+            asset_key: #insert dlt asset key
