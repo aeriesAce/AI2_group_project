@@ -184,5 +184,3 @@ cython_debug/
 # vscode
 *.vscode
 
-# max debugger
-felsearch.txt
