@@ -184,5 +184,3 @@ cython_debug/
 # vscode
 *.vscode
 
-# project_structure.txt, no idea why it showed up
-project_structure.txt
