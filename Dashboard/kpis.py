@@ -4,9 +4,15 @@ def show_kpis(df):
     col1, col2, col3 = st.columns(3)
     
     total_vacancies = df["vacancies"].sum()
-    unique_regions = df["municipality"].nunique()
-    most_common_type = df["employment_type"].mode().iloc[0] if not df["employment_type"].empty else "Ej tillgängligt"
+    total_regions = df["municipality"].nunique()
+    top_occupation = (
+    df.groupby("occupation_label")["vacancies"]
+    .sum()
+    .sort_values(ascending=False)
+    .head(1)
+)
+    name = top_occupation.index[0]
     
-    col1.metric("Lediga tjänster", total_vacancies)
-    col2.metric("Kommuner", unique_regions)
-    col3.metric("Populär anställningsform", most_common_type)
+    col1.metric("Totala lediga tjänster", total_vacancies)
+    col2.metric("Kommuner med lediga tjänster", total_regions)
+    col3.metric("Mest eftersökta tjänsten", name)

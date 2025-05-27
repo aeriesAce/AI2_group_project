@@ -74,22 +74,17 @@ def sun_chart(select_occ):
 
     # ----------------------------------------------------- Generell funktion för charts -------------------------------------------------------------------------
 
-def show_bar_chart(query: str, x: str, y: str, title: str, color_scale = "edge"):
+def show_bar_chart(query: str, x: str, y: str):
     df = con.execute(query).fetch_df()
-    st.write(df.head())
 
     fig = px.bar(df, x=x, y=y, 
                 labels={x: x.replace("_", " ").title(),
-                        y: y.replace("_", " ").title()},
-                title=title, 
+                        y: y.replace("_", " ").title()}, 
                 color=y, 
-                color_continuous_scale= "edge")
-    st.plotly_chart(fig)
+                color_continuous_scale= "ylgn")
+    st.plotly_chart(fig, theme = "streamlit")
 
     # ------------------------------------------------------- Generell funktion för PyDeck map chart --------------------------------------------------------------#
-
-with open("Dashboard/swedish_municipalities.geojson", encoding="utf-8") as f:
-    geojson_data = json.load(f)
 
 def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, use_normalized=True,color_scale_factor=255, tooltip_title="område", tooltip_field = "kom_namn", zoom=4):
 
@@ -142,17 +137,20 @@ def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, u
 
     st.pydeck_chart(deck)
 
-st.title("Antal platser per kommun – Pedagogik")
-pydeck_chart(
-            geojson_data=geojson_data,
-            df=df,
-            match_col_geojson="kom_namn",         # geojson matchning
-            match_col_df="municipality",      # matchar med municipality
-            value_col="vacancies",
-            use_normalized = True,
-            tooltip_title="område",
-            tooltip_field = "kom_namn"
-        )
+def call_pydeck_chart():
+    with open("Dashboard/swedish_municipalities.geojson", encoding="utf-8") as f:
+        geojson_data = json.load(f)
+    st.title("Antal platser per kommun – Pedagogik")
+    pydeck_chart(
+                geojson_data=geojson_data,
+                df=df,
+                match_col_geojson="kom_namn",         # geojson matchning
+                match_col_df="municipality",      # matchar med municipality
+                value_col="vacancies",
+                use_normalized = True,
+                tooltip_title="område",
+                tooltip_field = "kom_namn"
+            )
 
 
 #######################       Denna är inte generell än, kommer bygga om den lite, men blir lättare att se för mig sen när jag ser helheten ############
