@@ -1,5 +1,6 @@
 import streamlit as st
 import base64
+#from Dashboard.dashboard import dashboard
 from config import occupation_map, load_mart
 from Dashboard.charts import show_bar_chart
 from Dashboard.query import get_top_employers
@@ -72,3 +73,9 @@ def statistic_page():
     st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
     query = get_top_employers(category_choice)
     show_bar_chart(query, x="Företag", y="Lediga tjänster")
+
+#def occupation_select():
+ 
+ #   category_choice = st.sidebar.selectbox("Välj yrkeskategori", list(occupation_map.keys()))
+  #  table = occupation_map.get(category_choice)
+   # df = load_mart(table)
