@@ -1,11 +1,9 @@
 import streamlit as st
-import duckdb
 import base64
-import plotly_express as px
 from config import occupation_map, load_mart
-from Dashboard.kpis import show_kpis
+from Dashboard.charts import show_bar_chart
+from Dashboard.query import get_top_employers
 
-con = duckdb.connect('jobs.duckdb')
 def background_pic(image):
     with open(image, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -24,40 +22,53 @@ def background_pic(image):
         unsafe_allow_html=True
     )
 
-def dashboard():
-    background_pic("Dashboard/Media/Hr.png")
-    st.title("HR Dashboard per kategori")
+# show specified columns in the dataframe
+def show_columns(df):
+    sort_df = df.sort_values(by= "vacancies", ascending= False)
 
-    # choosing a category
+    columns = ["municipality", "vacancies", "employer_name", "occupation_label", "employment_type"]
+    st.dataframe(
+        sort_df[columns],
+        column_config={
+            "vacancies": st.column_config.NumberColumn("Lediga tjänster"),
+            "municipality": st.column_config.TextColumn("Kommun"),
+            "employer_name": st.column_config.TextColumn("Arbetsgivare"),
+            "occupation_label": st.column_config.TextColumn("Yrke"),
+            "employment_type": st.column_config.TextColumn("Anställingstyp")
+        },
+        hide_index=True
+    )
+
+# creating pages for a more
+def pages():
+    pg = st.navigation([
+        st.Page(homepage, title= "Hem"),
+        st.Page("Dashboard/dashboard.py", title= ("Jobb")),
+        st.Page(statistic_page, title= "Statistik")
+    ])
+    pg.run()
+
+# a function to reset the search filters
+def reset_filters():
+    for key in [
+        "occupation_group", "occupation_label", "region", "municipality",
+        "experience_required", "driving_license"
+    ]:
+        st.session_state.pop(key, None)
+    st.session_state.filters_reset = True  
+
+# homepage, first page
+def homepage():
+    background_pic("Dashboard/Media/Hr.png")
+    st.title("Välkommen, \n# Navigera genom att göra ett val i sidebaren till vänster")
+
+# statistic chart page
+def statistic_page():
     category_choice = st.sidebar.selectbox("Välj yrkeskategori", list(occupation_map.keys()))
     table = occupation_map.get(category_choice)
     df = load_mart(table)
 
-    # to filter the categories we want
-    st.sidebar.header("Filter")
-    occupation_group = st.sidebar.multiselect("Välj yrkesgrupp", sorted(df["occupation_group"].dropna().unique()))
-    region = st.sidebar.multiselect("Välj kommun", sorted(df["region"].dropna().unique()))
-
-    filtered_df = df.copy()
-    if occupation_group:
-        filtered_df = filtered_df[filtered_df["occupation_group"].isin(occupation_group)]
-    if region:
-        filtered_df = filtered_df[filtered_df["region"].isin(region)]
-
-    st.markdown(f"Statistik för {category_choice}")
-    show_kpis(filtered_df)
-
     # diagram for the data
-    st.subheader("Annonser per kommun")
-    if not filtered_df.empty:
-        plot_df = (
-            filtered_df.groupby("region")
-            .size()
-            .reset_index(name="Antal")
-            .sort_values("Antal", ascending=False)
-        )
-        fig = px.bar(plot_df, x="region", y="Antal", title="Antal annonser per kommun")
-        st.plotly_chart(fig)
-    else:
-        st.info("Ingen data att visa. Ändra filtren för att se resultat.")
-    
+    st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
+    query = get_top_employers(category_choice)
+    show_bar_chart(query, x="Företag", y="Lediga tjänster")
