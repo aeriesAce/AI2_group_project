@@ -1,6 +1,23 @@
 from config import occupation_map
 import duckdb
 
+# making a generic sql query as a option as well? test
+def build_sql_query(filters: dict) -> str:
+    clauses = []
+    for col, selected_values in filters.items():
+        if not selected_values:
+            continue
+        if isinstance(selected_values[0], bool):
+            bool_values = ", ".join(["TRUE" if v else "FALSE" for v in selected_values])
+            clauses.append(f"{col} IN ({bool_values})")
+        else:
+            quoted_values = ", ".join([f"'{str(v)}'" for v in selected_values])
+            clauses.append(f"{col} IN ({quoted_values})")
+    if clauses:
+        return "WHERE " + " AND ".join(clauses)
+    else:
+        return ""
+    
 con = duckdb.connect('jobs.duckdb')
 def get_top_employers(occupation):
     table = occupation_map.get(occupation)
@@ -20,7 +37,6 @@ def get_top_titles(occupation):
         FROM {table}
         GROUP BY headline
         ORDER BY  DESC
-        LIMIT 10
     """
     return query
 
@@ -31,16 +47,6 @@ def get_ads_region(occupation):
         FROM {table}
         GROUP BY region
         ORDER BY Annonser DESC
-        LIMIT 10
     """
     return query
-
-def filter_categories(table, column):
-    query = f"""
-        SELECT DISTINCT {column}
-        FROM {table}
-        WHERE {column} IS NOT NULL
-        ORDER BY {column}
-    """
-    return con.execute(query).fetchdf()[column].tolist()
     
