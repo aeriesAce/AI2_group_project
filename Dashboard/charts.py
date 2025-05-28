@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import pydeck as pdk
 import json
-import os
 
 con = duckdb.connect('jobs.duckdb')
 
@@ -26,31 +25,13 @@ def jobs_per_type():                ### Vet inte riktigt varför denna är här 
     st.bar_chart(data.set_index('job_type'))
 
 # ------------------------------ TEST KPI FÖR MAP CHART -----------------------------------
+# bro this is a query <3 / elvira
 
 df = con.execute("""
     SELECT municipality, SUM(vacancies) AS vacancies
     FROM marts.mart_pedagogik
     GROUP BY municipality
 """).fetchdf()
-# ------------------------------------------------------- En Generell funktion för suncharts --------------------------------------------------------------------
-#def show_sunburst_chart(df: pd.DataFrame, path: list[str], value_col: str, title: str, color_scale='blues', top_n=8):
-    #df_grouped = (
-    #    df.groupby(path, as_index=False)[value_col]
-   #     .sum()
-  #      .sort_values(value_col, ascending=False)
- #       .head(top_n))
-#
-    #fig = px.sunburst(
-    #    df_grouped,
-    #    path=path,
-    #    values=value_col,
-    #    color=value_col,
-    #    hover_data={value_col: True},
-    #    color_continuous_scale=color_scale,
-    #    color_continuous_midpoint=np.average(
-    #        df_grouped[value_col],
-    #        weights=df_grouped[value_col]))
-    #fig.update_layout(title=title)
 
 
 # ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
@@ -74,8 +55,12 @@ def sun_chart(select_occ):
 
     # ----------------------------------------------------- Generell funktion för charts -------------------------------------------------------------------------
 
-def show_bar_chart(query: str, x: str, y: str):
-    df = con.execute(query).fetch_df()
+def show_bar_chart(data: str, x: str, y: str):
+
+    if isinstance(data, str):
+        df = con.execute(data).fetch_df()  # om det är en SQL-sträng
+    else:
+        df = data
 
     fig = px.bar(df, x=x, y=y, 
                 labels={x: x.replace("_", " ").title(),
@@ -138,7 +123,7 @@ def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, u
     st.pydeck_chart(deck)
 
 def call_pydeck_chart():
-    with open("Dashboard/swedish_municipalities.geojson", encoding="utf-8") as f:
+    with open("Data/swedish_municipalities.geojson", encoding="utf-8") as f:
         geojson_data = json.load(f)
     st.title("Antal platser per kommun – Pedagogik")
     pydeck_chart(

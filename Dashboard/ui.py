@@ -1,9 +1,8 @@
 import streamlit as st
 import base64
-#from Dashboard.dashboard import dashboard
-from config import occupation_map, load_mart
 from Dashboard.charts import show_bar_chart
 from Dashboard.query import get_top_employers
+from config import occupation_map
 
 def background_pic(image):
     with open(image, "rb") as img:
@@ -40,23 +39,6 @@ def show_columns(df):
         hide_index=True
     )
 
-# creating pages for a more
-def pages():
-    pg = st.navigation([
-        st.Page(homepage, title= "Hem"),
-        st.Page("Dashboard/dashboard.py", title= ("Jobb")),
-        st.Page(statistic_page, title= "Statistik")
-    ])
-    pg.run()
-
-# a function to reset the search filters
-def reset_filters():
-    for key in [
-        "occupation_group", "occupation_label", "region", "municipality",
-        "experience_required", "driving_license"
-    ]:
-        st.session_state.pop(key, None)
-    st.session_state.filters_reset = True  
 
 # homepage, first page
 def homepage():
@@ -66,16 +48,17 @@ def homepage():
 # statistic chart page
 def statistic_page():
     category_choice = st.sidebar.selectbox("Välj yrkeskategori", list(occupation_map.keys()))
-    table = occupation_map.get(category_choice)
-    df = load_mart(table)
 
     # diagram for the data
     st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
     query = get_top_employers(category_choice)
     show_bar_chart(query, x="Företag", y="Lediga tjänster")
 
-#def occupation_select():
- 
- #   category_choice = st.sidebar.selectbox("Välj yrkeskategori", list(occupation_map.keys()))
-  #  table = occupation_map.get(category_choice)
-   # df = load_mart(table)
+# creating pages for a more website feeling
+def pages():
+    pg = st.navigation([
+        st.Page(homepage, title= "Hem"),
+        st.Page("Dashboard/dashboard.py", title= ("Jobb")),
+        st.Page(statistic_page, title= "Statistik")
+    ])
+    pg.run()
