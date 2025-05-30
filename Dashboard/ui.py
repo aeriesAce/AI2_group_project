@@ -2,6 +2,7 @@ import streamlit as st
 import base64
 from Dashboard.charts import show_bar_chart
 from Dashboard.query import get_top_employers
+from Dashboard.llm import call_Gemeni
 from config import occupation_map
 
 def background_pic(image):
@@ -42,12 +43,14 @@ def show_columns(df):
 
 # homepage, first page
 def homepage():
+    st.set_page_config(page_title="HR Dashboard", layout="wide")
     background_pic("Dashboard/Media/Hr.png")
     st.title("Välkommen, \n# Navigera genom att göra ett val i sidebaren till vänster")
 
 # statistic chart page
 def statistic_page():
-    category_choice = st.sidebar.selectbox("Välj yrkeskategori", list(occupation_map.keys()))
+    background_pic("Dashboard/Media/Hr.png")
+    category_choice = st.sidebar.radio("Välj yrkeskategori", list(occupation_map.keys()))
 
     # diagram for the data
     st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
@@ -56,9 +59,14 @@ def statistic_page():
 
 # creating pages for a more website feeling
 def pages():
-    pg = st.navigation([
-        st.Page(homepage, title= "Hem"),
-        st.Page("Dashboard/dashboard.py", title= ("Jobb")),
-        st.Page(statistic_page, title= "Statistik")
-    ])
+    pages = {
+    "Hemskärm": [
+        st.Page(homepage, title= "Hem")
+    ],
+        "Yrkeskategorier": [
+            st.Page("Dashboard/dashboard.py", title= "Annonser"),
+            st.Page(statistic_page, title= "Trender")
+        ]
+    }
+    pg = st.navigation(pages)
     pg.run()

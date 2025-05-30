@@ -12,7 +12,7 @@ occupation_map = {
 def reset_filters():
     for key in [
         "occupation_group", "occupation_label", "region", "municipality",
-        "experience_required", "driving_license"
+        "experience_required", "driving_license", "duration"
     ]:
         st.session_state.pop(key, None)
     st.session_state.filters_reset = True  
