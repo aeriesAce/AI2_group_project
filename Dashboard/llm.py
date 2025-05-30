@@ -21,7 +21,7 @@ def Gemini(prompt: str) -> str:
 
 
 def call_Gemeni(df):
-    st.subheader("Analysera med Gemini")
+    st.subheader("Analysera annonser")
 
     prompts = {
         "Vanliga önskade egenskaper": "Analysera jobbeskrivningarna och lista de vanligaste egenskaperna som arbetsgivarna söker.",
@@ -52,11 +52,10 @@ def call_Gemeni(df):
         prompt_text = "\n\n".join(job_descriptions[:50])  # Begränsa för att inte krascha modellen
         full_prompt = f"{selected_prompt}\n\n{prompt_text}"
 
-        if st.button("Fråga Gemini"):
-            with st.spinner("Loading please wait"):
+        if st.button("Sammanfatta"):
+            with st.spinner("Rikard tänker, ett ögonblick"):
                 response = Gemini(full_prompt)
-                st.success("Rikard är bög?:")
-                st.write("Svar: Ja det är han")
+                st.success("Rikard har tänkt klart")
                 st.write(response)
             gemini_chart(df, prompts)
 
