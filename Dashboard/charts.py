@@ -175,3 +175,27 @@ def show_top_employers_sob():
                                 ['vacancies'].sum()
                                 .sort_values('vacancies',ascending=False).head(10))
     show_bar_chart(top_employers, "employer_name", 'vacancies', "Top 10 arbetsgivare inom Säkerhet och bevakning")
+# ------------------------------------------------------ Pie chart som visar andel jobb som kräver erfarenhet och andel jobb som ej kräver det i procent
+def show_experience_pie_chart(df):
+    df_total = df.groupby('experience_required', as_index=False)['count'].sum()
+    
+    # Mappa true/false till tydliga etiketter
+    mapping = {True: 'Erfarenhet krävs', False: 'Erfarenhet krävs ej', 'true': 'Erfarenhet krävs', 'false': 'Erfarenhet krävs ej'}
+    df_total['experience_required'] = df_total['experience_required'].map(mapping)
+
+    # Skapa pie chart
+    fig = px.pie(df_total, names='experience_required', values='count',
+                 labels={'experience_required': 'Krav på erfarenhet'},
+                 hover_data={'experience_required': True, 'count': True})
+
+    # Hover-text och etiketter
+    fig.update_traces(textinfo='percent+label', hovertemplate='<b>%{label}</b><br>Antal annonser: %{value}<extra></extra>')
+    
+    # Gör pie charten större
+    fig.update_layout(
+        width=600,    # Anpassa bredden
+        height=600,   # Anpassa höjden
+        margin=dict(l=50, r=50, t=50, b=50)  # Anpassa marginalen
+    )
+    
+    st.plotly_chart(fig)

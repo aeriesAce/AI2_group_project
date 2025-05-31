@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
-from Dashboard.charts import show_bar_chart
-from Dashboard.query import get_top_employers
+from Dashboard.query import get_top_employers, get_experience_distribution
+from Dashboard.charts import show_bar_chart, show_experience_pie_chart
 from Dashboard.llm import call_Gemeni
 from config import occupation_map
 
@@ -56,6 +56,12 @@ def statistic_page():
     st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
     query = get_top_employers(category_choice)
     show_bar_chart(query, x="Företag", y="Lediga tjänster")
+    
+    # Pie chart för erfarenhetskrav i vald kategori
+    st.subheader(f"Fördelning av erfarenhetskrav inom {category_choice}")
+    df_exp = get_experience_distribution(category_choice)
+    show_experience_pie_chart(df_exp)
+    
 
 # creating pages for a more website feeling
 def pages():
