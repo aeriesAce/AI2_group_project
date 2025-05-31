@@ -49,4 +49,21 @@ def get_ads_region(occupation):
         ORDER BY Annonser DESC
     """
     return query
+
+def get_experience_distribution(category_choice): 
     
+    table_map = {
+        "Pedagogik": "marts.mart_pedagogik",
+        "Säkerhet och bevakning": "marts.mart_sakr_bevak",
+        "Transport och lager": "marts.mart_tran_lager"
+    }
+    table = table_map.get(category_choice)
+    query = f"""
+    SELECT experience_required, COUNT(*) AS count 
+    FROM {table}
+    GROUP BY experience_required
+    """
+    con = duckdb.connect('jobs.duckdb')
+    df = con.execute(query).fetch_df()
+    con.close()
+    return df
