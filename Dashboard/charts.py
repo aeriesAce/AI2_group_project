@@ -189,5 +189,6 @@ def show_experience_pie_chart(df):
                  labels={'experience_required': 'Krav på erfarenhet'},
                  hover_data={'experience_required': True, 'count': True})
 
-  
+    # Hover-text och etiketter
+    fig.update_traces(textinfo='percent+label', hovertemplate='<b>%{label}</b><br>Antal annonser: %{value}<extra></extra>')
     st.plotly_chart(fig)
