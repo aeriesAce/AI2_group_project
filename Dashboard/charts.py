@@ -185,7 +185,6 @@ def show_experience_pie_chart(df):
 
     # Skapa pie chart
     fig = px.pie(df_total, names='experience_required', values='count',
-                 title='Fördelning av erfarenhetskrav',
                  labels={'experience_required': 'Krav på erfarenhet'},
                  hover_data={'experience_required': True, 'count': True})
 
