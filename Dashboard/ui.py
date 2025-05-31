@@ -57,6 +57,11 @@ def statistic_page():
     query = get_top_employers(category_choice)
     show_bar_chart(query, x="Företag", y="Lediga tjänster")
     
+    # Pie chart för erfarenhetskrav i vald kategori
+    st.subheader(f"Fördelning av erfarenhetskrav inom {category_choice}")
+    df_exp = get_experience_distribution(category_choice)
+    show_experience_pie_chart(df_exp)
+    
 
 # creating pages for a more website feeling
 def pages():
