@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / '../Data'))
 from pipeline import jobtech_source
 from dlt.destinations import duckdb
 
-db_path = str(Path(__file__).parent /"jobs.duckdb")
+db_path = str(Path(__file__).parents[0] /"jobs.duckdb")
 
 #dlt asset
 dlt_resource = DagsterDltResource()
@@ -44,8 +44,8 @@ dbt_project.prepare_if_dev()
 def dbt_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
     yield from dbt.cli(["build"], context=context).stream()
 #job
-job_dlt = dg.define_asset_job("job_dlt", selection=dg.AssetSelection.keys("dlt_jobtech_source_jobs"))
-job_dbt = dg.define_asset_job("job_dbt", selection=dg.AssetSelection.keys("stg_jobs"))
+job_dlt = dg.define_asset_job("job_dlt", selection=dg.AssetSelection.assets("dlt_jobtech_source_jobs"))
+job_dbt = dg.define_asset_job("job_dbt", selection=dg.AssetSelection.assets('stg_jobs').downstream())
 
 # schedule that runs job_dlt every day at 8:17 UTC
 schedule_dlt= dg.ScheduleDefinition(

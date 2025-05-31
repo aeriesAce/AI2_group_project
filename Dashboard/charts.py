@@ -12,7 +12,7 @@ def jobs_per_type():                ### Vet inte riktigt varför denna är här 
     # SQL-fråga för att få antalet jobb per job_type
     query = """
     SELECT job_type, COUNT(*) as count
-    FROM marts.mart_anställningsvillkor
+    FROM marts.mart_anstallningsvillkor
     GROUP BY job_type;
     """
 
