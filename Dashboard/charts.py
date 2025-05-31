@@ -194,8 +194,8 @@ def show_experience_pie_chart(df):
     
     # Gör pie charten större
     fig.update_layout(
-        width=800,    # Anpassa bredden
-        height=800,   # Anpassa höjden
+        width=600,    # Anpassa bredden
+        height=600,   # Anpassa höjden
         margin=dict(l=50, r=50, t=50, b=50)  # Anpassa marginalen
     )
     
