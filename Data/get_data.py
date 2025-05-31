@@ -29,6 +29,7 @@ def fetch_jobs(occupation_fields):
 
             offset += limit
 
+
 # DLT source (connectts to the pipeline)
 @dlt.source
 def jobtech_source():
@@ -37,4 +38,4 @@ def jobtech_source():
         "E7hm_BLq_fqZ",  # Säkerhet och bevakning
         "ASGV_zcE_bWf"   # Transport, distribution, lager
     ]
-    return dlt.resource(fetch_jobs(occupation_fields), name="jobs", write_disposition="append")
+    return dlt.resource(fetch_jobs(occupation_fields), name="jobs", primary_key="id", write_disposition="merge")
