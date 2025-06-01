@@ -5,6 +5,8 @@ from Dashboard.kpis import show_kpis
 from config import occupation_map, dashboard_filters, reset_filters
 from Dashboard.query import build_sql_query
 from Dashboard.charts import show_bar_chart
+from Dashboard.charts import call_pydeck_chart
+from Dashboard.llm import call_Gemeni
 background_pic("Dashboard/Media/Hr.png")
 con = duckdb.connect("jobs.duckdb")
                               
@@ -26,8 +28,17 @@ with st.container():
         st.button("Egenskaper")
 
 with st.container():
-    st.subheader(f"Data inom {category_choice}")
-    show_kpis(filtered_df)
+    st.subheader(f"Vad vill du visa?")
+    choice = st.radio("Välj ett alternativ", ["KPI", "Karta", "Analys"])
+
+    if choice == "KPI":
+        show_kpis(filtered_df)
+
+    elif choice == "Karta":
+        call_pydeck_chart(filtered_df)
+    elif choice == "Analys":
+        call_Gemeni(filtered_df)
+        
 
 with st.container():
     show_bar_chart(filtered_df, x="vacancies", y="municipality")
