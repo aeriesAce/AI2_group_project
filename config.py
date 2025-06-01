@@ -1,5 +1,6 @@
 import streamlit as st
 import duckdb
+import datetime
 # here I map each occupation category to its mart table to load data dynamically
 # its used to filter and load data based on the selected occupation in the dashboard
 occupation_map = {
@@ -105,3 +106,17 @@ def dashboard_filters(table):
         "experience_required": experience_required,
         "driving_license": driving_license
     }
+
+def show_time_trend():
+    today = datetime.datetime.now()
+    jan_1 = datetime.date(today.year, 1, 1)
+    dec_31 = datetime.date(today.year, 12, 31)
+
+    calendar = st.date_input(
+        "Select dates to filter",
+        (jan_1, today.date()),
+        jan_1,
+        dec_31,
+        format="DD.MM.YYYY")
+    
+    return calendar
