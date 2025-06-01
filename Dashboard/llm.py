@@ -24,20 +24,27 @@ def call_Gemeni(df):
     st.subheader("Analysera annonser")
 
     prompts = {
-        "Vanliga önskade egenskaper": "Analysera jobbeskrivningarna och lista de vanligaste egenskaperna som arbetsgivarna söker.",
-        "Sammanfattning av krav": "Sammanfatta vilka krav som oftast förekommer i dessa jobbannonser.",
-        "Gör en graf över det": """Analysera jobbeskrivningarna och returnera ett JSON-objekt med två listor:
-        - "x": en lista med top tio egenskaperna arbetsgivare söker
-        - "y": hur många yrken de vanligaste egenskaperna nämns
+        "Gör en graf över det": """
+        Analysera jobbeskrivningarna och returnera en JSON som beskriver en graf med:
 
-        Format:
+        - De 10 vanligaste egenskaperna arbetsgivare efterfrågar
+        - Hur många gånger varje egenskap nämns
+
+        **Formatet ska vara exakt så här**:
+
         {
-        "chart": {
-            "x": [...],
-            "y": [...],
+            "chart": {
+            "x": ["Egenskap 1", "Egenskap 2", "..."],
+            "y": [antal1, antal2, ...]
+            }
         }
-        }
-        Returnera endast JSON utan förklaring."""
+
+        ⚠️ Viktigt:
+        - x ska innehålla de 10 vanligaste personliga egenskaperna i jobbeskrivningarna.
+        - y ska vara hur många gånger varje egenskap nämns.
+        - All data ska vara från inputen. Inga gissningar, ingen lista, ingen extra förklaring.
+        - Returnera ENDAST detta JSON-objekt, inget annat.
+        """
         }
 
     prompt_choice = st.selectbox("Välj analys:", list(prompts.keys()))
