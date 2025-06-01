@@ -16,7 +16,7 @@
 | Run the data pipeline | `python Data/pipeline.py` |
 | Launch the dashboard | `streamlit run main.py` |
 
-<summary>## Scenario<summary/>
+<summary>Scenario<summary/>
 You are a data engineer for a HR agency. 
 Here's an overview of the business model of this agency:
 
@@ -38,7 +38,7 @@ to analyze the data, which is important to improve the efficiency of their work
 
 </details open>
 
-<summary>## Tests & Documentation</summary>
+<summary>Tests & Documentation</summary>
 
 ### Implemented tests
 
@@ -54,3 +54,7 @@ to analyze the data, which is important to improve the efficiency of their work
 - All models documented with `description` in `schema.yml`
 - Column-level documentation in `fct_job_ads`
 </details>
+
+## The team:
+Rickard
+Max
