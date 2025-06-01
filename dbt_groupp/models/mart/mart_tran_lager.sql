@@ -28,6 +28,8 @@ SELECT
     a.experience_required,
     a.driving_license,
     a.own_car,
+    a.publication_date,
+    a.last_publication_date
 FROM fct_job_ads f
 LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id

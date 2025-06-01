@@ -59,27 +59,6 @@ def call_Gemeni(df):
                 st.write(response)
             gemini_chart(df, prompts)
 
-# test prompt
-def jobads_trend():
-    prompt = """
-        Analysera jobbeskrivningarna nedan, grupperade per occupation_group.
-        Identifiera de egenskaper som förekommer i **alla grupper**.
-        För varje sådan egenskap, ange hur ofta den nämns i respektive grupp.
-
-        Format:
-        {
-        "chart": {
-            "x": [...],
-            "y": {
-                "Pedagogik": [...],
-                "Säkerhet och bevakning": [...],
-                ...
-            }
-        }
-        }
-        Returnera endast JSON utan förklaring.
-    """
-    response = Gemini(prompt)
 
 def gemini_chart(df, prompts):
     # fetches the non NAN job_descriptions to a list
