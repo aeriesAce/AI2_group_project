@@ -25,7 +25,6 @@ with st.container():
     with col2:
         st.subheader("Annonser")
         show_columns(filtered_df)
-        st.button("Egenskaper")
 
 with st.container():
     st.subheader(f"Vad vill du visa?")
