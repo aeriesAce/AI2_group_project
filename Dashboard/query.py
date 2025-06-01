@@ -1,5 +1,6 @@
 from config import occupation_map
 import duckdb
+con = duckdb.connect('jobs.duckdb')
 
 # making a generic sql query as a option as well? test
 def build_sql_query(filters: dict) -> str:
@@ -18,7 +19,6 @@ def build_sql_query(filters: dict) -> str:
     else:
         return ""
     
-con = duckdb.connect('jobs.duckdb')
 def get_top_employers(occupation):
     table = occupation_map.get(occupation)
     query = f"""
@@ -40,24 +40,8 @@ def get_top_titles(occupation):
     """
     return query
 
-def get_ads_region(occupation):
-    table = occupation_map.get(occupation)
-    query = f"""
-        SELECT region, SUM(vacancies) AS Annonser
-        FROM {table}
-        GROUP BY region
-        ORDER BY Annonser DESC
-    """
-    return query
-
 def get_experience_distribution(category_choice): 
-    
-    table_map = {
-        "Pedagogik": "marts.mart_pedagogik",
-        "Säkerhet och bevakning": "marts.mart_sakr_bevak",
-        "Transport och lager": "marts.mart_tran_lager"
-    }
-    table = table_map.get(category_choice)
+    table = occupation_map.get(category_choice)
     query = f"""
     SELECT experience_required, COUNT(*) AS count 
     FROM {table}
@@ -69,13 +53,7 @@ def get_experience_distribution(category_choice):
     return df
 
 def get_driving_license_requierd(category_choice): 
-
-    table_map = {
-        "Pedagogik": "marts.mart_pedagogik",
-        "Säkerhet och bevakning": "marts.mart_sakr_bevak",
-        "Transport och lager": "marts.mart_tran_lager"
-    }
-    table = table_map.get(category_choice)
+    table = occupation_map.get(category_choice)
     query = f"""
     SELECT driving_license, COUNT(*) AS count 
     FROM {table}
