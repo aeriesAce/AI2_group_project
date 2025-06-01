@@ -58,3 +58,5 @@ to analyze the data, which is important to improve the efficiency of their work
 ## The team:
 Rickard
 Max
+Salih
+Elvira
