@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
-from Dashboard.query import get_top_employers, get_experience_distribution
-from Dashboard.charts import show_bar_chart, show_experience_pie_chart
+from Dashboard.query import get_top_employers, get_experience_distribution, get_driving_license_requierd
+from Dashboard.charts import show_bar_chart, show_experience_pie_chart, show_driving_license_required
 from Dashboard.llm import call_Gemeni
 from config import occupation_map
 
@@ -58,9 +58,16 @@ def statistic_page():
     show_bar_chart(query, x="Företag", y="Lediga tjänster")
     
     # Pie chart för erfarenhetskrav i vald kategori
-    st.subheader(f"Fördelning av erfarenhetskrav inom {category_choice}")
-    df_exp = get_experience_distribution(category_choice)
-    show_experience_pie_chart(df_exp)
+    st.subheader(f"Fördelning av krav inom {category_choice}")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        df_exp = get_experience_distribution(category_choice)
+        show_experience_pie_chart(df_exp)
+
+    with col2:
+        df_dl = get_driving_license_requierd(category_choice)
+        show_driving_license_required(df_dl)
     
 
 # creating pages for a more website feeling

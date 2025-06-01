@@ -67,3 +67,21 @@ def get_experience_distribution(category_choice):
     df = con.execute(query).fetch_df()
     con.close()
     return df
+
+def get_driving_license_requierd(category_choice): 
+
+    table_map = {
+        "Pedagogik": "marts.mart_pedagogik",
+        "Säkerhet och bevakning": "marts.mart_sakr_bevak",
+        "Transport och lager": "marts.mart_tran_lager"
+    }
+    table = table_map.get(category_choice)
+    query = f"""
+    SELECT driving_license, COUNT(*) AS count 
+    FROM {table}
+    GROUP BY driving_license
+    """
+    con = duckdb.connect('jobs.duckdb')
+    df = con.execute(query).fetch_df()
+    con.close()
+    return df
