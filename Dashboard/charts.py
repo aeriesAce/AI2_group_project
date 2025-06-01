@@ -199,3 +199,23 @@ def show_experience_pie_chart(df):
     )
     
     st.plotly_chart(fig)
+
+def show_driving_license_required(df):
+    df_total = df.groupby('driving_license', as_index=False)['count'].sum()
+
+    mapping = {True: 'Körkort krävs', False: 'Körkort krävs ej', 'true': 'Körkort krävs', 'false': 'Körkort krävs ej'}
+    df_total['driving_license'] = df_total['driving_license'].map(mapping)
+
+    fig = px.pie(df_total, names='driving_license', values='count',
+                 labels={'driving_license': 'Krav på erfarenhet'},
+                 hover_data={'driving_license': True, 'count': True})
+
+    fig.update_traces(textinfo='percent+label', hovertemplate='<b>%{label}</b><br>Antal annonser: %{value}<extra></extra>')
+
+    fig.update_layout(
+        width=600,   
+        height=600,   
+        margin=dict(l=50, r=50, t=50, b=50)  
+    )
+
+    st.plotly_chart(fig)
