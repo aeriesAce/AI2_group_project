@@ -2,15 +2,17 @@
 import dagster as dg
 import dlt
 import sys
-from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
-from dagster_dlt import DagsterDltResource, dlt_assets
 from pathlib import Path
-from pipeline import jobtech_source
-from dlt.destinations import duckdb
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT_DIR / "Data"
 sys.path.insert(0, str(DATA_DIR))
+
+from pipeline import jobtech_source
+from dlt.destinations import duckdb
+from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
+from dagster_dlt import DagsterDltResource, dlt_assets
+
 
 db_path = str(ROOT_DIR /"jobs.duckdb")
 

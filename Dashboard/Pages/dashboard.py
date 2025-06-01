@@ -9,6 +9,10 @@ from Dashboard.llm import call_Gemeni
 
 background_pic("Dashboard/Media/Hr.png")
 
+def load_filtered_data(query):
+    with duckdb.connect("jobs.duckdb") as con:
+        return con.execute(query).fetchdf()
+    
 # Use context manager - safe!
 with duckdb.connect("jobs.duckdb") as con:
     category_choice = st.sidebar.radio("Välj yrkeskategori", list(occupation_map.keys()))
@@ -23,7 +27,7 @@ with duckdb.connect("jobs.duckdb") as con:
             st.button("Rensa filter", on_click=reset_filters)
             query = f"SELECT * FROM {table} {build_sql_query(filters)}"
             #st.code(query, language="sql") 
-            filtered_df = con.execute(query).fetchdf()
+            filtered_df = load_filtered_data(query)
         with col2:
             st.subheader("Annonser")
             show_columns(filtered_df)
@@ -32,8 +36,9 @@ with duckdb.connect("jobs.duckdb") as con:
         st.subheader(f"Vad vill du visa?")
         choice = st.radio("Välj ett alternativ", ["KPI", "Karta", "Analys"])
 
+        show_kpis(filtered_df)
         if choice == "KPI":
-            show_kpis(filtered_df)
+            show_bar_chart(filtered_df, x="vacancies", y="municipality")
 
         # elif choice == "Karta":
         #     call_pydeck_chart(filtered_df)
@@ -45,5 +50,4 @@ with duckdb.connect("jobs.duckdb") as con:
             # Better: make a sync wrapper
             call_Gemeni(filtered_df)
 
-    with st.container():
-        show_bar_chart(filtered_df, x="vacancies", y="municipality")
+    #with st.container():
