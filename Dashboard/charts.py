@@ -79,7 +79,7 @@ def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, u
         match = df[df[match_col_df].str.strip().str.lower() == geo_name.strip().lower()]
 
         if not match.empty:
-            feature["properties"]["value"] = int(match[value_col].values[0])
+            feature["properties"]["value"] = int(match[value_col].sum())
     else:
         feature["properties"]["value"] = 0
     
@@ -122,13 +122,13 @@ def pydeck_chart(geojson_data, df, match_col_geojson, match_col_df, value_col, u
 
     st.pydeck_chart(deck)
 
-def call_pydeck_chart():
+def call_pydeck_chart(filtered_df):
     with open("Data/swedish_municipalities.geojson", encoding="utf-8") as f:
         geojson_data = json.load(f)
-    st.title("Antal platser per kommun – Pedagogik")
+    st.title("Antal platser per kommun")
     pydeck_chart(
                 geojson_data=geojson_data,
-                df=df,
+                df=filtered_df,
                 match_col_geojson="kom_namn",         # geojson matchning
                 match_col_df="municipality",      # matchar med municipality
                 value_col="vacancies",
