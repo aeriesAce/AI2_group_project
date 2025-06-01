@@ -8,7 +8,7 @@ import json
 
 con = duckdb.connect('jobs.duckdb')
 
-def jobs_per_type():                ### Vet inte riktigt varför denna är här om jag ska vara ärlig? men men
+def jobs_per_type():
     # SQL-fråga för att få antalet jobb per job_type
     query = """
     SELECT job_type, COUNT(*) as count
@@ -23,15 +23,6 @@ def jobs_per_type():                ### Vet inte riktigt varför denna är här 
     # Visa resultatet i Streamlit
     st.title("Jobbstatistik baserat på anställningsvillkor")
     st.bar_chart(data.set_index('job_type'))
-
-# ------------------------------ TEST KPI FÖR MAP CHART -----------------------------------
-# bro this is a query <3 / elvira
-
-df = con.execute("""
-    SELECT municipality, SUM(vacancies) AS vacancies
-    FROM marts.mart_pedagogik
-    GROUP BY municipality
-""").fetchdf()
 
 
 # ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
@@ -58,7 +49,7 @@ def sun_chart(select_occ):
 def show_bar_chart(data: str, x: str, y: str):
 
     if isinstance(data, str):
-        df = con.execute(data).fetch_df()  # om det är en SQL-sträng
+        df = con.execute(data).fetch_df()
     else:
         df = data
 
@@ -137,44 +128,6 @@ def call_pydeck_chart(filtered_df):
                 tooltip_field = "kom_namn"
             )
 
-
-#######################       Denna är inte generell än, kommer bygga om den lite, men blir lättare att se för mig sen när jag ser helheten ############
-#######################       Men kommer få pilla lite mer med den när jag ser datan ordentligt för färger etc ################
-
-
-
-
-
-
- ######################################## UNDER här är kpi's vilket vi kommer flytta ut sen ########################
-
-
-    # ------------------------------------------------------ Top 10 inom lager vi stoppar in i den generella funktionen -----------------------------------------------
-
-def show_top_employers_tdl():
-    df = con.execute("SELECT * FROM marts.mart_tran_lager").fetch_df()
-    top_employers = (df.groupby("employer_name", as_index=False)
-                                ['vacancies'].sum()
-                                .sort_values('vacancies',ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", 'vacancies', "Top 10 arbetsgivare inom Transport och Lager")
-
-# ------------------------------------------------------ Top 10 inom pedagogik vi stoppar in i den generella funktionen -----------------------------------------------
-
-def show_top_employers_pedagogik():
-    df = con.execute("SELECT * FROM marts.mart_pedagogik").fetch_df()
-    top_employers = (df.groupby("employer_name", as_index=False)
-                                ["Totala jobb"].sum()
-                                .sort_values("Totala jobb",ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", "Totala jobb", "Top 10 arbetsgivare inom Pedagogik")
-
-# ------------------------------------------------------ Top 10 inom säkerhet och bevakning vi stoppar in i den generella funktionen -----------------------------------------------
-
-def show_top_employers_sob():
-    df = con.execute("SELECT * FROM marts.mart_sakr_bevak").fetch_df()
-    top_employers = (df.groupby('vacancies', as_index=False)
-                                ['vacancies'].sum()
-                                .sort_values('vacancies',ascending=False).head(10))
-    show_bar_chart(top_employers, "employer_name", 'vacancies', "Top 10 arbetsgivare inom Säkerhet och bevakning")
 # ------------------------------------------------------ Pie chart som visar andel jobb som kräver erfarenhet och andel jobb som ej kräver det i procent
 def show_experience_pie_chart(df):
     df_total = df.groupby('experience_required', as_index=False)['count'].sum()

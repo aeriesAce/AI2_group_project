@@ -1,9 +1,5 @@
 import streamlit as st
 import base64
-from Dashboard.query import get_top_employers, get_experience_distribution, get_driving_license_requierd
-from Dashboard.charts import show_bar_chart, show_experience_pie_chart, show_driving_license_required
-from Dashboard.llm import call_Gemeni
-from config import occupation_map
 
 def background_pic(image):
     with open(image, "rb") as img:
@@ -40,45 +36,15 @@ def show_columns(df):
         hide_index=True
     )
 
-
-# homepage, first page
-def homepage():
-    st.set_page_config(page_title="HR Dashboard", layout="wide")
-    background_pic("Dashboard/Media/Hr.png")
-    st.title("Välkommen, \n# Navigera genom att göra ett val i sidebaren till vänster")
-
-# statistic chart page
-def statistic_page():
-    background_pic("Dashboard/Media/Hr.png")
-    category_choice = st.sidebar.radio("Välj yrkeskategori", list(occupation_map.keys()))
-
-    # diagram for the data
-    st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
-    query = get_top_employers(category_choice)
-    show_bar_chart(query, x="Företag", y="Lediga tjänster")
-    
-    # Pie chart för erfarenhetskrav i vald kategori
-    st.subheader(f"Fördelning av krav inom {category_choice}")
-    col1, col2 = st.columns(2)
-
-    with col1:
-        df_exp = get_experience_distribution(category_choice)
-        show_experience_pie_chart(df_exp)
-
-    with col2:
-        df_dl = get_driving_license_requierd(category_choice)
-        show_driving_license_required(df_dl)
-    
-
 # creating pages for a more website feeling
 def pages():
     pages = {
     "Hemskärm": [
-        st.Page(homepage, title= "Hem")
+        st.Page("Dashboard/Pages/homepage.py", title= "Hem")
     ],
         "Yrkeskategorier": [
-            st.Page("Dashboard/dashboard.py", title= "Annonser"),
-            st.Page(statistic_page, title= "Trender")
+            st.Page("Dashboard/Pages/dashboard.py", title= "Annonser"),
+            st.Page("Dashboard/Pages/statistic_page.py", title= "Trender")
         ]
     }
     pg = st.navigation(pages)
