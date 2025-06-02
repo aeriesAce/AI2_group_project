@@ -1,4 +1,5 @@
 -- mart schema for employement form--
+{{ config(materialized='view') }}
 WITH
     fct_job_ads as (select * from {{ ref('fct_job_ads') }}),
     dim_job_details as (select * from {{ ref('dim_job_details') }}),

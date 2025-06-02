@@ -49,5 +49,3 @@ models:
       - name: experience_required
       - name: driving_license
       - name: own_car
-      - name: publication_date
-      - name: last_publication_date

@@ -33,3 +33,4 @@ models:
       
     mart:
       +schema: marts
+      +materialized: view

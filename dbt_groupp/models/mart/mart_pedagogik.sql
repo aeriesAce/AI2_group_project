@@ -1,4 +1,5 @@
 -- mart schema for the occupation field Pedagogik --
+{{ config(materialized='view') }}
 WITH
     fct_job_ads AS (SELECT * FROM {{ ref('fct_job_ads') }}),
     dim_job_details AS (SELECT * FROM {{ ref('dim_job_details') }}),
@@ -27,9 +28,7 @@ SELECT
     jd.work_max,
     a.experience_required,
     a.driving_license,
-    a.own_car,
-    a.publication_date,
-    a.last_publication_date
+    a.own_car
 FROM fct_job_ads f
 LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id
