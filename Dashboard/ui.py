@@ -1,5 +1,6 @@
 import streamlit as st
 import base64
+from Dashboard.charts import sun_chart
 
 def background_pic(image):
     with open(image, "rb") as img:
@@ -49,3 +50,16 @@ def pages():
     }
     pg = st.navigation(pages)
     pg.run()
+
+def sunburst_choice(df):
+    path_choice = st.multiselect(
+    "Välj nivåer för sunburst:",
+    options=['occupation_category', 'occupation_group', 'occupation_label',
+             'region', 'municipality', 'employer_name',
+             'employment_type', 'duration', 'experience_required', 'driving_license'],
+    default=['occupation_category', 'occupation_group', 'occupation_label']
+)
+
+    if path_choice:
+        sun_chart(df, path=path_choice, value_col='Lediga tjänster')
+

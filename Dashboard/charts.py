@@ -26,24 +26,36 @@ def jobs_per_type():
 
 
 # ------------------------------------------- om vi vill ha kanske, vet inte? sparar den här, för då kan vi göra om den nedanför så vi kan ha alla occpupations ----------------------
-def sun_chart(select_occ):
-    df = con.execute("SELECT * FROM marts.mart_pedagogik").fetch_df()
-    df = df[df["occupation_category"] == select_occ]
-    top_employers = df.groupby(['employer_name', 'municipality'], as_index=False)['vacancies'].sum()
+def sun_chart(data, path: list, value_col: str):
+    if isinstance(data, str):
+        df = con.execute(data).fetch_df()
+    else:
+        df = data
+
     fig = px.sunburst(
-        top_employers,
-        path =['municipality', 'vacancies'],
-        values = 'vacancies',
-        color = 'vacancies', 
-        hover_data={'vacancies': True},
-        color_continuous_scale='blues',
-        color_continuous_midpoint=np.average(df['vacancies'], weights=df['vacancies'])
+        df,
+        path=path, 
+        values=value_col,
+        color=value_col,
+        color_continuous_scale='ylgn',
+        color_continuous_midpoint=np.average(df[value_col], weights=df[value_col])
     )
 
     st.plotly_chart(fig)
 
+def line_chart(data:str, x:str, y:str):
+    if isinstance(data, str):
+        df = con.execute(data).fetch_df()
+    else:
+        df = data
 
-
+    fig = px.line(df, 
+                  x=x, 
+                  y=y, 
+                  markers = True,
+                  labels={x: x.replace("_", " ").title(),
+                        y: y.replace("_", " ").title()})
+    st.plotly_chart(fig, theme = "streamlit")
     # ----------------------------------------------------- Generell funktion för charts -------------------------------------------------------------------------
 
 def show_bar_chart(data: str, x: str, y: str):
