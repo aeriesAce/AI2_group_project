@@ -10,13 +10,24 @@
 | Install the dependencies | `uv pip install -r requirements.lock.txt` |
 
 ### First time run
+| Steps | Command |
+| --- | --- |
 | Navigate to the dbt project folder | `cd dbt_groupp` |
 | Install dbt dependencies | `dbt deps` |
 | Navigate back to the root folder | `cd ..` |
 | Run the data pipeline | `python Data/pipeline.py` |
 | Launch the dashboard | `streamlit run main.py` |
 
-<summary>Scenario<summary/>
+### To use Gemeni
+| Steps | Command |
+| --- | --- |
+| Get an API key | [Here](https://ai.google.dev/gemini-api/docs/api-key) |
+| Log in with your Google account |  |
+| Create a .env file in local repo and put api key in the .env file | `API_KEY = "KEY HERE` |
+
+## Scenario
+<details open>
+<summary>Click to hide/show</summary>
 You are a data engineer for a HR agency. 
 Here's an overview of the business model of this agency:
 
@@ -35,10 +46,11 @@ they are not able to draw insights from these job ads as:
 - The information are messy
 - They have spent too much time to manually collect and clean data so that they do not have much time
 to analyze the data, which is important to improve the efficiency of their work
+</details>
 
-</details open>
-
-<summary>Tests & Documentation</summary>
+### Test & documentation
+<details>
+<summary>Click to show/hide</summary>
 
 ### Implemented tests
 
@@ -53,6 +65,9 @@ to analyze the data, which is important to improve the efficiency of their work
 ### Documentation
 - All models documented with `description` in `schema.yml`
 - Column-level documentation in `fct_job_ads`
+- Flow and Lineage docs:
+[Flowchart](Lineage_Flowchart/flow_diagram.drawio.png)
+[Lineage](Lineage_Flowchart/dbt-dag.png)
 </details>
 
 ## The team:
