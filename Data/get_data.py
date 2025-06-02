@@ -38,4 +38,4 @@ def jobtech_source():
         "E7hm_BLq_fqZ",  # Säkerhet och bevakning
         "ASGV_zcE_bWf"   # Transport, distribution, lager
     ]
-    return dlt.resource(fetch_jobs(occupation_fields), name="jobs", primary_key="id", write_disposition="merge")
+    return dlt.resource(fetch_jobs(occupation_fields), name="jobs", primary_key="id", write_disposition="replace")
