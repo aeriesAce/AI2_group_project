@@ -24,27 +24,17 @@ def call_Gemeni(df):
     st.subheader("Analysera annonser")
 
     prompts = {
-        "Gör en graf över det": """
-        Analysera jobbeskrivningarna och returnera en JSON som beskriver en graf med:
-
-        - De 10 vanligaste egenskaperna arbetsgivare efterfrågar
-        - Hur många gånger varje egenskap nämns
-
-        **Formatet ska vara exakt så här**:
-
+        "Vanliga önskade egenskaper": "Analysera jobbeskrivningarna och lista de vanligaste egenskaperna som arbetsgivarna söker, skriv ut detta snyggt i kolumner, ta bort 'Frekvens' men ha kvar sammanfattning.",
+        "Sammanfattning av krav": "Sammanfatta vilka krav som oftast förekommer i dessa jobbannonser, skriv ut detta snyggt i kolumner.",
+        "Gör en graf över det": """Analysera jobbeskrivningarna och returnera en graf med top 10 baserat på personliga egenskaper:
+         Format:
         {
             "chart": {
-            "x": ["Egenskap 1", "Egenskap 2", "..."],
-            "y": [antal1, antal2, ...]
-            }
+                "x": [...],
+                "y": [...],
         }
-
-        ⚠️ Viktigt:
-        - x ska innehålla de 10 vanligaste personliga egenskaperna i jobbeskrivningarna.
-        - y ska vara hur många gånger varje egenskap nämns.
-        - All data ska vara från inputen. Inga gissningar, ingen lista, ingen extra förklaring.
-        - Returnera ENDAST detta JSON-objekt, inget annat.
-        """
+        }
+        Returnera endast JSON utan förklaring."""
         }
 
     prompt_choice = st.selectbox("Välj analys:", list(prompts.keys()))
@@ -64,7 +54,6 @@ def call_Gemeni(df):
                 response = Gemini(full_prompt)
                 st.success("Rikard har tänkt klart")
                 st.write(response)
-            gemini_chart(df, prompts)
 
 
 def gemini_chart(df, prompts):

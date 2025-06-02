@@ -33,10 +33,22 @@ def get_top_employers(occupation):
 def get_top_titles(occupation):
     table = occupation_map.get(occupation)
     query = f"""
-        SELECT headline, COUNT(*) AS Titles
+        SELECT occupation_label AS 'Titlar', SUM(vacancies) as 'Lediga tjänster'
         FROM {table}
-        GROUP BY headline
-        ORDER BY  DESC
+        GROUP BY occupation_label, vacancies
+        ORDER BY "Lediga tjänster" DESC
+        LIMIT 10
+    """
+    return query
+
+def trend_time():
+    query = f"""
+        SELECT 
+            publication_date::DATE AS datum,
+            COUNT(*) AS "Antal annonser"
+        FROM marts.mart_active_jobs
+        GROUP BY datum
+        ORDER BY datum
     """
     return query
 
