@@ -14,8 +14,9 @@
 | --- | --- |
 | Navigate to the dbt project folder | `cd dbt_groupp` |
 | Install dbt dependencies | `dbt deps` |
+| Set up the dataflow | `dbt build` |
 | Navigate back to the root folder | `cd ..` |
-| Run the data pipeline | `python Data/pipeline.py` |
+| Run the data pipeline | `python Data/pipeline.py` or press the play button|
 | Launch the dashboard | `streamlit run main.py` |
 
 ### To use Gemeni
