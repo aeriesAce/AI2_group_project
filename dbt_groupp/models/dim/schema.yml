@@ -16,6 +16,7 @@ models:
     columns:
       - name: job_details_id
         tests: [not_null]
+      - name: job_id
       - name: headline
         tests: [not_null]
       - name: job_description

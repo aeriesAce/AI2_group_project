@@ -6,5 +6,6 @@ SELECT
     COALESCE(CAST(number_of_vacancies AS INTEGER), 1) AS vacancies,
     relevance,
     deadline,
-    working_hours AS conditions
+    working_hours AS conditions,
+    publication_date
 FROM {{ ref('stg_jobs') }} 

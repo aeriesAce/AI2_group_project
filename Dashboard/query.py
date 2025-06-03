@@ -1,6 +1,5 @@
 from config import occupation_map
 import duckdb
-con = duckdb.connect('jobs.duckdb')
 
 # making a generic sql query as a option as well? test
 def build_sql_query(filters: dict) -> str:
@@ -22,10 +21,10 @@ def build_sql_query(filters: dict) -> str:
 def get_top_employers(occupation):
     table = occupation_map.get(occupation)
     query = f"""
-        SELECT employer_name AS 'Företag', SUM(vacancies) AS 'Lediga tjänster'
+        SELECT employer_name AS 'Företag', COUNT(job_id) AS 'Antal annonser'
         FROM {table}
         GROUP BY "Företag"
-        ORDER BY "Lediga tjänster" DESC
+        ORDER BY "Antal annonser" DESC
         LIMIT 10
     """
     return query
@@ -33,24 +32,17 @@ def get_top_employers(occupation):
 def get_top_titles(occupation):
     table = occupation_map.get(occupation)
     query = f"""
-        SELECT occupation_label AS 'Titlar', SUM(vacancies) as 'Lediga tjänster'
+        SELECT 
+            occupation_label AS "Titel", 
+            occupation_category AS "Kategori", 
+            SUM(vacancies) AS "Lediga tjänster"
         FROM {table}
-        GROUP BY occupation_label, vacancies
+        GROUP BY occupation_label, occupation_category
         ORDER BY "Lediga tjänster" DESC
         LIMIT 10
     """
     return query
 
-def trend_time():
-    query = f"""
-        SELECT 
-            publication_date::DATE AS datum,
-            COUNT(*) AS "Antal annonser"
-        FROM marts.mart_active_jobs
-        GROUP BY datum
-        ORDER BY datum
-    """
-    return query
 
 def get_experience_distribution(category_choice): 
     table = occupation_map.get(category_choice)

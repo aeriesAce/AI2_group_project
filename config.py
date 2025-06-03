@@ -1,6 +1,6 @@
 import streamlit as st
-import duckdb
-import datetime
+import pandas as pd
+
 # here I map each occupation category to its mart table to load data dynamically
 # its used to filter and load data based on the selected occupation in the dashboard
 occupation_map = {
@@ -18,10 +18,9 @@ def reset_filters():
         st.session_state.pop(key, None)
     st.session_state.filters_reset = True  
 
-def dashboard_filters(table):
+def dashboard_filters(con, table):
     # setting to visually change boolean true to string ja and false to nej
     yn = [("Ja", True), ("Nej", False)]
-    con = duckdb.connect("jobs.duckdb")
 
     col1, col2, col3 = st.columns(3)
     with st.expander("Filtrera data", expanded=True):
@@ -94,8 +93,6 @@ def dashboard_filters(table):
                                  default=st.session_state.get("driving_license", []), key="driving_license")
             driving_license = [val[1] for val in lic]
 
-    con.close()
-    
     # returns the filters
     return {
         "occupation_group": occup_group,
@@ -107,16 +104,31 @@ def dashboard_filters(table):
         "driving_license": driving_license
     }
 
-def show_time_trend():
-    today = datetime.datetime.now()
-    jan_1 = datetime.date(today.year, 1, 1)
-    dec_31 = datetime.date(today.year, 12, 31)
+def filter_value(value):
+    if isinstance(value, list):
+        return ', '.join(str(v) for v in value)
+    return str(value)
 
-    calendar = st.date_input(
-        "Select dates to filter",
-        (jan_1, today.date()),
-        jan_1,
-        dec_31,
-        format="DD.MM.YYYY")
+def show_time_slider(df, date_column="publication_date"):
+    df[date_column] = pd.to_datetime(df[date_column])
     
-    return calendar
+    if df[date_column].dropna().empty:
+        st.error("Inga datum tillgängliga för datumväljaren.")
+        return pd.Timestamp.min, pd.Timestamp.mi
+    
+    min_date = df[date_column].min().date()
+    max_date = df[date_column].max().date()
+
+    if min_date == max_date:
+        st.warning("Endast annonser från en dag hittades. Datumväljaren visas med detta datum.")
+        max_date = min_date + pd.Timedelta(days=1)
+
+    date_range = st.slider(
+        "Välj datumintervall",
+        min_value=min_date,
+        max_value=max_date,
+        value=(min_date, max_date),
+        format="YYYY-MM-DD"
+    )
+    
+    return date_range

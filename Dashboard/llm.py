@@ -3,7 +3,7 @@ import streamlit as st
 import os
 import pandas as pd
 import json
-import plotly.express as px
+import re
 from Dashboard.charts import show_bar_chart
 from dotenv import load_dotenv
 
@@ -21,21 +21,22 @@ def Gemini(prompt: str) -> str:
 
 
 def call_Gemeni(df):
-    st.subheader("Analysera annonser")
+    st.subheader("Analysera egenskaper och krav")
 
     prompts = {
         "Vanliga önskade egenskaper": "Analysera jobbeskrivningarna och lista de vanligaste egenskaperna som arbetsgivarna söker, skriv ut detta snyggt i kolumner, ta bort 'Frekvens' men ha kvar sammanfattning.",
         "Sammanfattning av krav": "Sammanfatta vilka krav som oftast förekommer i dessa jobbannonser, skriv ut detta snyggt i kolumner.",
-        "Gör en graf över det": """Analysera jobbeskrivningarna och returnera en graf med top 10 baserat på personliga egenskaper:
-         Format:
+        "Visualisera det": """Analysera jobbeskrivningarna och returnera en chart med top 10 baserat på önskade egenskaper:
+        Format:
         {
             "chart": {
                 "x": [...],
-                "y": [...],
+                "y": [...]
+            }
         }
-        }
+    }
         Returnera endast JSON utan förklaring."""
-        }
+    }
 
     prompt_choice = st.selectbox("Välj analys:", list(prompts.keys()))
     selected_prompt = prompts[prompt_choice]
@@ -49,37 +50,37 @@ def call_Gemeni(df):
         prompt_text = "\n\n".join(job_descriptions[:50])  # Begränsa för att inte krascha modellen
         full_prompt = f"{selected_prompt}\n\n{prompt_text}"
 
-        if st.button("Sammanfatta"):
+        if st.button("Analysera"):
             with st.spinner("Rikard tänker, ett ögonblick"):
                 response = Gemini(full_prompt)
                 st.success("Rikard har tänkt klart")
+
+            if prompt_choice == "Visualisera det":
+                try:
+                    # Extrahera JSON från response
+                    match = re.search(r"\{.*\}", response, re.DOTALL)
+                    if not match:
+                        st.error("Kunde inte hitta JSON i Gemini-svaret.")
+                        st.code(response)
+                        return
+
+                    json_text = match.group(0)
+                    data = json.loads(json_text)
+                    x = data["chart"]["x"]
+                    y = data["chart"]["y"]
+
+                    df_chart = pd.DataFrame({
+                        'Egenskap': x,
+                        'Antal nämningar': y
+                    })
+
+                    st.write("### Top 10 personliga egenskaper som efterfrågas")
+                    show_bar_chart(df_chart, x="Antal nämningar", y="Egenskap")
+                    
+                except Exception as e:
+                    st.error("Fel vid tolkning av JSON.")
+                    st.code(response)
+                    st.exception(e)
+
+            else:
                 st.write(response)
-
-
-def gemini_chart(df, prompts):
-    # fetches the non NAN job_descriptions to a list
-    job_descriptions = df["job_description"].dropna().tolist()
-    sample = "\n\n".join(job_descriptions[:50])
-
-    # builds the prompt from the Gemeni function with job_description sample
-    prompt = prompts["Gör en graf över det"] + sample
-    response = Gemini(prompt)
-
-    # cleans the data response and removes leading and trailing whitespaces
-    raw = response.strip()
-
-    # removes the markdown block
-    if raw.startswith("```json"):
-        raw = raw[7:-3].strip()
-
-    # parses JSON and generate the chart
-    try:
-        chart_data = json.loads(raw)["chart"]
-        df_chart = pd.DataFrame({
-            "Egenskap": chart_data["x"],
-            "Förekomst": chart_data["y"]
-        })
-        st.subheader(f"Top 10 mest efterfrågade personliga egenskaperna")
-        show_bar_chart(df_chart, x="Egenskap", y="Förekomst")
-    except:
-        st.error("Kunde inte tolka JSON från Gemini.")

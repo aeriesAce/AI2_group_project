@@ -1,6 +1,7 @@
 -- dim table för job details
 SELECT
     {{ dbt_utils.generate_surrogate_key(['job_id', 'headline']) }} AS job_details_id,
+    job_id,
     headline,
     job_description,
     job_description_formatted,
