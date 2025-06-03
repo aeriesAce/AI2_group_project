@@ -10,6 +10,7 @@ SELECT
     f.vacancies,
     f.relevance,
     f.deadline,
+    CAST(f.publication_date AS DATE) AS publication_date,
     e.employer_name,
     e.employer_workplace,
     e.country,
@@ -18,6 +19,7 @@ SELECT
     o.occupation_label,
     o.occupation_group,
     o.occupation_category,
+    jd.job_id,
     jd.headline,
     jd.job_description,
     jd.job_description_formatted,
@@ -28,7 +30,7 @@ SELECT
     jd.work_max,
     a.experience_required,
     a.driving_license,
-    a.own_car
+    a.own_car,
 FROM fct_job_ads f
 LEFT JOIN dim_job_details jd ON f.job_details_id = jd.job_details_id
 LEFT JOIN dim_occupation o ON f.occupation_id = o.occupation_id

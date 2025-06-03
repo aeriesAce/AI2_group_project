@@ -25,8 +25,8 @@ def run_pipeline():
 
     print(f"new adds added: {new_rows}")
 
-# if __name__ == "__main__":
-run_pipeline()
+if __name__ == "__main__":
+    run_pipeline()
 ## test to see how much is being loaded from the pipeline after it has run.
 ##con = duckdb.connect("DB_path")
 ##result = con.execute(f"SELECT COUNT(*) FROM {TABLE_NAME}").fetchone()

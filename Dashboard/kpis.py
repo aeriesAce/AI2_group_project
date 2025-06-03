@@ -8,7 +8,7 @@ def show_kpis(df):
     total_vacancies = df["vacancies"].sum()
     unique_employers = df["employer_name"].nunique()
     total_occupations = df["occupation_label"].nunique()
-    latest_ad = con.execute("SELECT MAX(publication_date) FROM marts.mart_active_jobs").fetchone()[0]
+    latest_ad = df["publication_date"].max()
     latest_ad_str = latest_ad.strftime("%d/%m-%y")
     
     col1.metric("Totala lediga tjänster", total_vacancies)

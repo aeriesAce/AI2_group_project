@@ -1,7 +1,7 @@
 import streamlit as st
 from Dashboard.ui import background_pic
 from Dashboard.query import get_top_employers, get_experience_distribution, get_driving_license_requierd, get_top_titles
-from Dashboard.charts import show_experience_pie_chart, show_bar_chart, show_driving_license_required, sun_chart
+from Dashboard.charts import show_experience_pie_chart, show_bar_chart, show_driving_license_required
 from config import occupation_map
 background_pic("Dashboard/Media/Hr.png")
 category_choice = st.sidebar.radio("Välj yrkeskategori", list(occupation_map.keys()))
@@ -10,12 +10,12 @@ with col1:
     # diagram for the data
     st.subheader(f"Top 10 arbetsgivare inom {category_choice}")
     query = get_top_employers(category_choice)
-    show_bar_chart(query, x="Företag", y="Lediga tjänster")
+    show_bar_chart(query, x="Företag", y="Antal annonser")
 
 with col2:
     st.subheader(f"10 högst sökta titlarna inom {category_choice}")
     query = get_top_titles(category_choice)
-    show_bar_chart(query, x="Titlar", y= 'Lediga tjänster')
+    show_bar_chart(query, x="Titel", y= 'Lediga tjänster')
     
 # Pie chart för erfarenhetskrav i vald kategori
 st.subheader(f"Fördelning av krav inom {category_choice}")
